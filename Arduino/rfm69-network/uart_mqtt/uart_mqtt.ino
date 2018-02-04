@@ -1,5 +1,4 @@
 /**************************************************************
- *
  * Arduino file to create a uart serial to ethernet interface 
  * between the gateway arduino and the server. 
  **************************************************************/
@@ -120,6 +119,14 @@ void serialEvent()
   */
 }
 
+/**************************************************************
+ * Function: mqttCallback
+ * ------------------------------------------------------------ 
+ * summary: callback function that is called when a message is
+ * sent from the mqtt server on the subscribe topic
+ * parameters: char topic, byte payload, uint length
+ * return: void
+ **************************************************************/
 void mqttCallback(char* topic, byte* payload, unsigned int length)
 {
   
@@ -134,7 +141,13 @@ void mqttCallback(char* topic, byte* payload, unsigned int length)
   
 }
 
-// function to connect to server if connection is lost
+/**************************************************************
+ * Function: reconnect
+ * ------------------------------------------------------------ 
+ * summary: function to connect to server if connection is lost
+ * parameters: void
+ * return: void
+ **************************************************************/
 void reconnect()
 {
   // Loop until we're reconnected
@@ -149,7 +162,13 @@ void reconnect()
   }
 }
 
-// request the network id from uart
+/**************************************************************
+ * Function: reconnect
+ * ------------------------------------------------------------ 
+ * summary: request the network id from uart
+ * parameters: void
+ * return: uint8_t 
+ **************************************************************/
 uint8_t getNetworkID()
 {
   
