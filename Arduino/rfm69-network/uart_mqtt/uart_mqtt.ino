@@ -1,6 +1,8 @@
-/*
-The code for the ethernet enabled arduino. 
-*/
+/**************************************************************
+ *
+ * Arduino file to create a uart serial to ethernet interface 
+ * between the gateway arduino and the server. 
+ **************************************************************/
 
 #include <SPI.h>
 #include <Ethernet.h>
@@ -69,7 +71,14 @@ void loop()
   mqtt_client.loop();
 }
 
-// new data is available
+/**************************************************************
+ * Function: serialEvent
+ * ------------------------------------------------------------ 
+ * summary: reads data from serial, parses data, and publishes 
+ * to mqtt client
+ * parameters: void
+ * return: void
+ **************************************************************/
 void serialEvent()
 {
   
