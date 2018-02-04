@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo -n "Enter where you would like this file to go in your system:"
+read destination
+scp dsh_user@10.1.10.97:/home/reno/dshPython/dshData.csv "$destination"
