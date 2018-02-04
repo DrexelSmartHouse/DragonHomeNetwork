@@ -1,0 +1,20 @@
+This file contains some of the TODOs and future ideas about
+this fork of the library that should be explored
+
+Implementing callback functions:
+	The idea is that at the bare minimum an event message will
+	trigger a callback function for handling the event.
+	Some things to think about:
+	
+	Should there be two event callbacks,
+	one for each type of event data?
+
+	Should there be callbacks for other things like receiving data
+
+Router idea:
+	Each sensor node starts at an id of 255 and gets assigned a new id
+	from the gateway when it first gets on a network.
+
+	Use the event bit or even the last unused bit
+
+
