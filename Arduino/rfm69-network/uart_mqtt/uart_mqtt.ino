@@ -30,6 +30,15 @@ uint8_t getNetworkID();
 void reconnect();
 void mqttCallback(char* topic, byte* payload, unsigned int length);
 
+bool publish = false;
+
+/**************************************************************
+ * Function: setup
+ * ------------------------------------------------------------ 
+ * summary: initializes serial interface and mqtt client
+ * parameters: void
+ * return: void
+ **************************************************************/
 void setup()
 {
   Serial.begin(115200);
@@ -58,8 +67,14 @@ void setup()
   delay(1500);
 }
 
-bool publish = false;
-
+/**************************************************************
+ * Function: loop
+ * ------------------------------------------------------------ 
+ * summary: top level loop manages mqtt connection and calls
+ * mqtt_client.loop()
+ * parameters: void
+ * return: void
+ **************************************************************/
 void loop()
 {
   

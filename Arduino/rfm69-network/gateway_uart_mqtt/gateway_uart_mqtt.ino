@@ -1,9 +1,15 @@
+/**************************************************************
+ * Arduino file to create a gateway for the DragonHome Network.
+ * The gateway requests data from the nodes and once the data
+ * is received it sends it off to the to the serial>ethernet
+ * Arduino.
+ **************************************************************/
+
 #include "RFM69_DSH.h"
 
 RFM69_DSH dsh_radio;
 
 const uint8_t network_id = 0;
-
 const uint8_t max_node_id = 20; // value between 1-255
 
 const unsigned long time_out_ms = 1000;
@@ -16,7 +22,7 @@ bool available_nodes[max_node_id+1];
 
 uint8_t current_node_id = 1;
 
-// function protypes
+// function prototypes
 void publishSensorReading();
 void publishLogMsg(String msg);
 void restartTimer();
@@ -26,6 +32,14 @@ bool requestAllFromNextNode();
 void startNetworkSweep();
 void networkScan();
 
+/**************************************************************
+ * Function: setup
+ * ------------------------------------------------------------ 
+ * summary: initializes serial interface and radio and updates
+ * the list of live nodes
+ * parameters: void
+ * return: void
+ **************************************************************/
 void setup()
 {
 	Serial.begin(115200);
@@ -33,11 +47,18 @@ void setup()
 	dsh_radio.initialize(RF69_915MHZ, GATEWAY_ID, network_id);
 	dsh_radio.setHighPower();
 
-  //update the list of nodes that are alive
   networkScan();
 
 }
 
+/**************************************************************
+ * Function: loop
+ * ------------------------------------------------------------ 
+ * summary: if else structure for error handling, requesting, 
+ * and receiving data from nodes
+ * parameters: void
+ * return: void
+ **************************************************************/
 void loop()
 {
 
@@ -104,6 +125,13 @@ void loop()
  
 }
 
+/**************************************************************
+ * Function: serialEvent
+ * ------------------------------------------------------------ 
+ * summary: handles commands received over serial 
+ * parameters: void
+ * return: void
+ **************************************************************/
 void serialEvent()
 {
   
@@ -194,10 +222,17 @@ void serialEvent()
    publishLogMsg("ERROR: BAD COMMAND");
 }
 
+/**************************************************************
+ * Function: publishSensorReading
+ * ------------------------------------------------------------ 
+ * summary: sends sensor reading over serial 
+ * structure: /{node id}/{sensor type}:{data}\n
+ * example: /1/TEMPC:40.1
+ * parameters: void
+ * return: void
+ **************************************************************/
 void publishSensorReading()
 {
-  // it needs to follow this pattern: /{node id}/{sensor type}:{data}\n
-  // example: /1/TEMPC:40.1
   
   Serial.print('/');
   Serial.print(dsh_radio.SENDERID);
@@ -209,22 +244,50 @@ void publishSensorReading()
   
 }
 
-void publishLogMsg(String msg)
+/**************************************************************
+ * Function: publishLogMsg
+ * ------------------------------------------------------------ 
+ * summary: sends log messages over serial
+ * parameters: string msg
+ * return: void
+ **************************************************************/
+void publishLogMsg(string msg)
 {
   Serial.print(F("/log:"));
   Serial.print(msg);
   Serial.print('\n');
 }
 
+/**************************************************************
+ * Function: restartTimer
+ * ------------------------------------------------------------ 
+ * summary: resets start_time 
+ * parameters: void
+ * return: void
+ **************************************************************/
 void restartTimer() {
   start_time = millis();
 }
 
+/**************************************************************
+ * Function: timeOut
+ * ------------------------------------------------------------ 
+ * summary: returns boolean if a send times out
+ * parameters: void
+ * return: bool 
+ **************************************************************/
 bool timeOut() {
   return (millis()-start_time >= time_out_ms);
 }
 
-// use the list of available node to find the next availble id
+/**************************************************************
+ * Function: incrementCurrNodeID
+ * ------------------------------------------------------------ 
+ * summary: returns boolean if next available node id is on 
+ * available_nodes list
+ * parameters: void
+ * return: bool
+ **************************************************************/
 bool incrementCurrNodeID() {
   
   while(current_node_id < max_node_id) {
@@ -237,8 +300,15 @@ bool incrementCurrNodeID() {
   return false;
 }
 
- // find the next node and request data from it
- // if we are at the end then return false
+/**************************************************************
+ * Function: requestAllFromNextNode
+ * ------------------------------------------------------------ 
+ * summary: finds the next node and requests data from it
+ * if the next node_id isn't on the available_nodes list then 
+ * it returns false
+ * parameters: void
+ * return: bool
+ **************************************************************/
 bool requestAllFromNextNode() {
  
   if (!incrementCurrNodeID()) return false;
@@ -256,6 +326,14 @@ bool requestAllFromNextNode() {
   } 
 }
 
+/**************************************************************
+ * Function: startNetworkSweep
+ * ------------------------------------------------------------ 
+ * summary: initializes a network sweep and calls 
+ * requestAllFromNextNode, returns error message if node is busy
+ * parameters: void
+ * return: void
+ **************************************************************/
 void startNetworkSweep()
 {
   if (!receiving && !sweep_mode) {
@@ -270,7 +348,14 @@ void startNetworkSweep()
   }
 }
 
-// ping all nodes on the network and update which are alive
+/**************************************************************
+ * Function: networkScan
+ * ------------------------------------------------------------ 
+ * summary: pings all nodes on the network and records which 
+ * nodes are live
+ * parameters: void
+ * return: bool 
+ **************************************************************/
 void networkScan()
 {
   for (uint8_t i = 1; i <= max_node_id; ++i) {
