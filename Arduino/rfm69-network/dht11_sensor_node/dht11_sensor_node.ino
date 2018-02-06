@@ -1,3 +1,9 @@
+/**************************************************************
+ * Arduino file to create a node for the DragonHome Network.
+ * The node polls for a request from the gateway for sensor 
+ * data and then responds to request.
+ **************************************************************/
+
 #include "RFM69_DSH.h"
 #include <SimpleDHT.h>
 
@@ -27,6 +33,14 @@ enum request_types {
 
 request_types current_request = NONE;
 
+
+/**************************************************************
+ * Function: setup
+ * ------------------------------------------------------------ 
+ * summary: Initializes serial and dsh_radio
+ * parameters: void
+ * return: void
+ **************************************************************/
 void setup()
 {
 	Serial.begin(115200);
@@ -36,6 +50,14 @@ void setup()
 
 }
 
+/**************************************************************
+ * Function: loop
+ * ------------------------------------------------------------ 
+ * summary: Loop polls for a request. If a request is received,
+ * it is parsed and sent through a switch to handle the request.
+ * parameters: void
+ * return: void
+ **************************************************************/
 void loop()
 {
   
