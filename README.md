@@ -1,6 +1,6 @@
 # DragonHomeNetwork
 
-Short intro
+The exponential growth of wireless communications markets around the world has allowed users from all corners of the globe to share data almost instantaneously. However, managing the collection and transmission of data from devices connected in small, confined networks presents major challenges. Automation, environmental analysis, and health and safety awareness are large areas of study that can benefit from Internet of Things (IoT) networks, but issues with compatibility, versatility, and cost inhibit implementation of such networks. The purpose of this project is to create an inexpensive, robust, low-power IoT sensor network to serve as an easily implementable model for individuals, communities, and cities. Additionally, the network can serve as a tool within other areas of research for experimentation and QA analysis. The foundation of this system was successfully created using Arduino-based processing in tandem with packet radios that communicate over sub-GHz frequency bands. Ethernet data packet management was done using MQ Telemetry Transport (MQTT) and data visualization was performed with Grafana and MATLAB. This network also utilizes InfluxDB to store and manage data effectively.
 
 ## Contents
 - [Quick start](#quickstart)
