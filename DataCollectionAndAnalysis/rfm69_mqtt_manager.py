@@ -37,9 +37,9 @@ def on_message(client, userdata, msg):
                 pass
             with open(dataFileName, 'a' ,newline='') as data:
                 writer = csv.DictWriter(data, fields)
-                writer.writerow({fields[0]: datetime.datetime.now(), 
-                                fields[1]: spTopic[2], 
-                                fields[2]: spTopic[3], 
+                writer.writerow({fields[0]: datetime.datetime.now(),
+                                fields[1]: spTopic[2],
+                                fields[2]: spTopic[3],
                                 fields[3]: spTopic[4],
                                 fields[4]: float(msg.payload)})
         except FileNotFoundError:
@@ -48,18 +48,18 @@ def on_message(client, userdata, msg):
                 writer = csv.DictWriter(data, fields)
                 headers = dict((n,n) for n in fields )
                 writer.writerow(headers)
-                writer.writerow({fields[0]: datetime.datetime.now(), 
-                                 fields[1]: spTopic[2], 
-                                 fields[2]: spTopic[3], 
+                writer.writerow({fields[0]: datetime.datetime.now(),
+                                 fields[1]: spTopic[2],
+                                 fields[2]: spTopic[3],
                                  fields[3]: spTopic[4],
                                  fields[4]: float(msg.payload)})
-    
+
 # helper function
 #request: either "SCAN" or "SWEEP"
 def send_request(request,client,network_id):
     topic = 'RFM69/' + str(network_id) + '/requests'
     client.publish(topic, request, 1)
-    
+
 
 # signal handler for ctrl-c
 def signal_handler(signal, frame):
@@ -89,7 +89,7 @@ def main():
     sweep_interval_s = config['interval']
 
     client = mqtt.Client(client_id)
-    
+
     # set the callback functions
     client.on_connect = on_connect
     client.on_message = on_message
