@@ -1,15 +1,10 @@
-/**************************************************************
- * Arduino file to create a node for the DragonHome Network.
- * The node polls for a request from the gateway for sensor 
- * data and then responds to request.
- **************************************************************/
-
 #include "RFM69_DSH.h"
 #include <SimpleDHT.h>
 
 RFM69_DSH dsh_radio;
 
-const uint8_t node_id = 7;
+//Change depending on the node number programmed
+const uint8_t node_id = 11;
 const uint8_t network_id = 0;
 
 const long sensor_interval = 1500;
@@ -17,6 +12,7 @@ const long sensor_interval = 1500;
 const uint8_t DHT11_pin = 4;
 byte temp = -1;
 byte humidity = -1;
+int rssi = 0;
 
 SimpleDHT11 dht11;
 
@@ -27,37 +23,22 @@ enum request_types {
   ALL,
   TEMPC,
   HUM,
+  RSSIDAT,
   BAD_REQUEST,
   NONE
 };
 
 request_types current_request = NONE;
 
-
-/**************************************************************
- * Function: setup
- * ------------------------------------------------------------ 
- * summary: Initializes serial and dsh_radio
- * parameters: void
- * return: void
- **************************************************************/
 void setup()
 {
 	Serial.begin(115200);
 
 	dsh_radio.initialize(RF69_915MHZ, node_id, network_id);
-	dsh_radio.setHighPower(false);
-
+	//dsh_radio.setHighPower(false);
+  dsh_radio.setHighPower();
 }
 
-/**************************************************************
- * Function: loop
- * ------------------------------------------------------------ 
- * summary: Loop polls for a request. If a request is received,
- * it is parsed and sent through a switch to handle the request.
- * parameters: void
- * return: void
- **************************************************************/
 void loop()
 {
   
@@ -67,12 +48,15 @@ void loop()
 
 		
     if (dsh_radio.requestReceived()) {
+      //Serial.println("" + String(dsh_radio.readRSSI()));
       if (dsh_radio.requestAllReceived())
         current_request = ALL;
       else if (dsh_radio.getReceivedStr() == "HUM")
         current_request = HUM;
       else if (dsh_radio.getReceivedStr() == "TEMPC")
         current_request = TEMPC;
+      else if (dsh_radio.getReceivedStr() == "RSSIDAT")
+        current_request = RSSIDAT;
       else
         current_request = BAD_REQUEST;
     }
@@ -110,6 +94,13 @@ void loop()
         current_request = NONE;
         break;
       }
+
+      if (!dsh_radio.sendSensorReading("RSSIDAT", dsh_radio.readRSSI())) {
+        dsh_radio.sendError("RSSI SEND");
+        Serial.println("RSSI Transmission Failed");
+        current_request = NONE;
+        break;
+      }
       
       dsh_radio.sendEnd();
       current_request = NONE;
@@ -130,7 +121,12 @@ void loop()
       dsh_radio.sendEnd();
       current_request = NONE;
       break;
-
+    case RSSIDAT:
+      if (!dsh_radio.sendSensorReading("RSSI", dsh_radio.readRSSI()))
+        Serial.println("RSSI Transmission Failed");
+      dsh_radio.sendEnd();
+      current_request = NONE;
+      break;
     
     default:
       current_request = NONE;
