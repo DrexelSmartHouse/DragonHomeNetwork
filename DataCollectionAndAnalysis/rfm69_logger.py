@@ -26,21 +26,24 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("RFM69/0/log")
 
 def on_message(client, userdata, msg):
-    print(msg.topic + " " + str(msg.payload))
-    spTopic = msg.topic.split("/")
-    fields = ('Time', 'Network ID', 'Node ID', 'Sensor Type', 'Sensor Value')
-    if(len(spTopic)>4):
-        try:
-            with open(log_file_name, 'r' ,newline='') as data:
-                #file was found, if not, exception
-                pass
-            with open(log_file_name, 'a' ,newline='') as data:
-                data.write(str(datetime.datetime.now())+ ', ' + str(msg.payload))
+    log_message = str(datetime.datetime.now()) + ', ' + str(msg.payload) + '\n'
+    print(log_message)
+    try:
+        with open(log_file_name, 'r') as data:
+            #file was found, if not, exception
+            pass
+        with open(log_file_name, 'a') as data:
+            data.write(log_message)
 
-        except FileNotFoundError:
-            print('Log file was not found, creating' + log_file_name)
-            with open(log_file_name, 'w' ,newline='') as data:
-                data.write(str(datetime.datetime.now())+ ', ' + str(msg.payload))
+    except FileNotFoundError:
+        print('Log file was not found, creating' + log_file_name)
+        with open(log_file_name, 'w') as data:
+            data.write(log_message)
+
+# signal handler for ctrl-c
+def signal_handler(signal, frame):
+    print("Ending Program.....")
+    sys.exit(0)
 
 def main():
 
@@ -61,6 +64,7 @@ def main():
     server_ip = config['server ip']
     server_port = config['server port']
     client_id = config['client id']
+    client_id += "_log"
     keep_alive = config['keep alive'] # max number of seconds without sending a message to the broker
     sweep_interval_s = config['interval']
 
