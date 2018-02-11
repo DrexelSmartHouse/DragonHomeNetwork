@@ -1,10 +1,16 @@
+
+/**************************************************************
+* Arduino file to create a node for the DragonHome Network.
+* The node polls for a request from the gateway for sensor 
+* data and then responds to request.
+**************************************************************/
 #include "RFM69_DSH.h"
 #include <SimpleDHT.h>
 
 RFM69_DSH dsh_radio;
 
 //Change depending on the node number programmed
-const uint8_t node_id = 11;
+const uint8_t node_id = 2;
 const uint8_t network_id = 0;
 
 const long sensor_interval = 1500;
@@ -30,15 +36,30 @@ enum request_types {
 
 request_types current_request = NONE;
 
+/**************************************************************
+* Function: setup
+* ------------------------------------------------------------ 
+* summary: Initializes serial and dsh_radio
+* parameters: void
+* return: void
+**************************************************************/
 void setup()
 {
 	Serial.begin(115200);
 
 	dsh_radio.initialize(RF69_915MHZ, node_id, network_id);
 	//dsh_radio.setHighPower(false);
-  dsh_radio.setHighPower();
+	dsh_radio.setHighPower();
 }
 
+/**************************************************************
+* Function: loop
+* ------------------------------------------------------------ 
+* summary: Loop polls for a request. If a request is received,
+* it is parsed and sent through a switch to handle the request.
+* parameters: void
+* return: void
+**************************************************************/
 void loop()
 {
   
@@ -48,7 +69,7 @@ void loop()
 
 		
     if (dsh_radio.requestReceived()) {
-      //Serial.println("" + String(dsh_radio.readRSSI()));
+      Serial.println("" + String(dsh_radio.readRSSI()));
       if (dsh_radio.requestAllReceived())
         current_request = ALL;
       else if (dsh_radio.getReceivedStr() == "HUM")
@@ -130,10 +151,5 @@ void loop()
     
     default:
       current_request = NONE;
- 
   }
-
-  
-  
 }
-
