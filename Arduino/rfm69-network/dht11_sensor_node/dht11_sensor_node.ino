@@ -10,7 +10,7 @@
 RFM69_DSH dsh_radio;
 
 //Change depending on the node number programmed
-const uint8_t node_id = 2;
+const uint8_t node_id = 10;
 const uint8_t network_id = 0;
 
 const long sensor_interval = 1500;
