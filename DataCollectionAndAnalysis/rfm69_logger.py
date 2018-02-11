@@ -31,27 +31,16 @@ def on_message(client, userdata, msg):
     fields = ('Time', 'Network ID', 'Node ID', 'Sensor Type', 'Sensor Value')
     if(len(spTopic)>4):
         try:
-            with open(dataFileName, 'r' ,newline='') as data:
+            with open(log_file_name, 'r' ,newline='') as data:
                 #file was found, if not, exception
                 pass
-            with open(dataFileName, 'a' ,newline='') as data:
-                writer = csv.DictWriter(data, fields)
-                writer.writerow({fields[0]: datetime.datetime.now(),
-                                fields[1]: spTopic[2],
-                                fields[2]: spTopic[3],
-                                fields[3]: spTopic[4],
-                                fields[4]: float(msg.payload)})
+            with open(log_file_name, 'a' ,newline='') as data:
+                data.write(str(datetime.datetime.now())+ ', ' + str(msg.payload))
+
         except FileNotFoundError:
-            print('File was not found, creating "dshData.csv"')
-            with open(dataFileName, 'w' ,newline='') as data:
-                writer = csv.DictWriter(data, fields)
-                headers = dict((n,n) for n in fields )
-                writer.writerow(headers)
-                writer.writerow({fields[0]: datetime.datetime.now(),
-                                 fields[1]: spTopic[2],
-                                 fields[2]: spTopic[3],
-                                 fields[3]: spTopic[4],
-                                 fields[4]: float(msg.payload)})
+            print('Log file was not found, creating' + log_file_name)
+            with open(log_file_name, 'w' ,newline='') as data:
+                data.write(str(datetime.datetime.now())+ ', ' + str(msg.payload))
 
 def main():
 
