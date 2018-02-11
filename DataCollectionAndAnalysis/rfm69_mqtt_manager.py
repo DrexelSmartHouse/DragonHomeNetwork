@@ -49,9 +49,9 @@ def on_message(client, userdata, msg):
                 headers = dict((n,n) for n in fields )
                 writer.writerow(headers)
                 writer.writerow({fields[0]: datetime.datetime.now(),
-                                 fields[1]: spTopic[2],
-                                 fields[2]: spTopic[3],
-                                 fields[3]: spTopic[4],
+                                 fields[1]: spTopic[1],
+                                 fields[2]: spTopic[2],
+                                 fields[3]: spTopic[3],
                                  fields[4]: float(msg.payload)})
 
 # helper function
