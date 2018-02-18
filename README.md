@@ -100,6 +100,7 @@ Below are the steps to initialize the server, gateway, and one sensor node.
 ## Research Analysis <a name="ra"></a>
 ### Cost Scaling <a name="cost"></a>
 The following table documents the cost of the core of the network - the Ethernet and gateway nodes.
+
 | Component                                                                   | Quantity | Price   |
 |-----------------------------------------------------------------------------|----------|---------|
 | [Arduino Uno]("http://amzn.to/2o2KFku")                                     | 2        | $15.98  |
@@ -114,6 +115,7 @@ The following table documents the cost of the core of the network - the Ethernet
 | Total                                                                       |          | $141.94 |
 
 The next table documents the cost of an additional node.
+
 | Component                                                                   | Quantity | Cost   |
 |-----------------------------------------------------------------------------|----------|--------|
 | [Arduino Uno]("http://amzn.to/2o2KFku")                                     | 1        | $7.99  |
@@ -126,6 +128,7 @@ The next table documents the cost of an additional node.
 | Total                                                                       |          | $98.95 |
 
 The final table documents how cost scales as _n_ nodes are added to the network.
+
 | Nodes | Cost      |  Network total cost |
 |-------|-----------|---------------------|
 | 1     | $98.95    | $240.89             |
