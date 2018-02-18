@@ -10,7 +10,8 @@ The exponential growth of wireless communications markets around the world has a
     - [RFM69 Arduino](#rfm69arduino)
     - [Ethernet Arduino](#ethernetarduino)
   - [Network setup](#networksetup)
-- [Testing / Quality Assurance](#qa)
+- [Research Analysis](#ra)
+  - [Cost Scaling](#cost)
 - [Troubleshooting](#troubleshooting)
 - [Releases](#releases)
 - [Contributors](#contributors)
@@ -45,7 +46,7 @@ The following hardware is necessary to set up the network and connect one node:
 
 ### Network setup <a name="networksetup"></a>
 Below are the steps to initialize the server, gateway, and one node.
-1. **Internet and gateway node setup. (proper title???)**
+1. Ethernet and gateway node setup.
 
    Program Arduino firmware (which?) onto a sensor node without a sensor on it (fix wording). Connect this node via txrx serial to another Arduino with Ethernet shield. TODO Include images 288-89, 291-93.
 
@@ -93,7 +94,42 @@ Below are the steps to initialize the server, gateway, and one node.
 
    In the dht11_sensor_node script, change the node id to match end node id. NOTE: Line number?
 
-## Testing / Quality Assurance <a name="qa"></a>
+## Research Analysis <a name="ra"></a>
+### Cost Scaling <a name="cost"></a>
+The following table documents the cost of the core of the network - the Ethernet and gateway nodes.
+| Component                                                                   | Quantity | Price   |
+|-----------------------------------------------------------------------------|----------|---------|
+| [Arduino Uno]("http://amzn.to/2o2KFku")                                     | 2        | $15.98  |
+|  [Proto Shield with Mini Breadboard]("http://amzn.to/2H5cfGe")              | 1        | $7.99   |
+| [RFM69HCW Wireless Transciever - 915MHz (4 pack)]("http://amzn.to/2nYT9sM") | 1        | $21.95  |
+| [10Kohm Resistor (400-pack)]("http://amzn.to/2BqvdXk")                      | 1        | $8.65   |
+| [9V 1A Arduino Power Supply]("http://amzn.to/2EWiUSA")                      | 1        | $6.99   |
+| [Voltage/logic converter]("http://amzn.to/2EWT3tM")                         | 1        | $5.39   |
+| [Solid core wire (ft)]("http://amzn.to/2BSlPgd")                            | 2        | $39.99  |
+| [Ethernet Shield]("http://bit.ly/2EPkiZq")                                  | 1        | $32.50  |
+| [3ft Ethernet cable]("http://bit.ly/2C3T68h")                               | 1        | $2.50   |
+| Total                                                                       |          | $141.94 |
+
+The next table documents the cost of an additional node.
+| Component                                                                   | Quantity | Cost   |
+|-----------------------------------------------------------------------------|----------|--------|
+| [Arduino Uno]("http://amzn.to/2o2KFku")                                     | 1        | $7.99  |
+|  [Proto Shield with Mini Breadboard]("http://amzn.to/2H5cfGe")              | 1        | $7.99  |
+| [RFM69HCW Wireless Transciever - 915MHz (4 pack)]("http://amzn.to/2nYT9sM") | 1        | $21.95 |
+| [10Kohm Resistor (400-pack)]("http://amzn.to/2BqvdXk")                      | 1        | $8.65  |
+| [9V 1A Arduino Power Supply]("http://amzn.to/2EWiUSA")                      | 1        | $6.99  |
+| [Voltage/logic converter]("http://amzn.to/2EWT3tM")                         | 1        | $5.39  |
+| [Solid core wire (ft)]("http://amzn.to/2BSlPgd")                            | 2        | $39.99 |
+| Total                                                                       |          | $98.95 |
+
+The final table documents how cost scales as _n_ nodes are added to the network.
+| Nodes | Cost      |  Network total cost |
+|-------|-----------|---------------------|
+| 1     | $98.95    | $240.89             |
+| 4     | $184.03   | $325.97             |
+| 16    | $590.20   | $732.14             |
+| 40    | $1402.54  | $1544.48            |
+| 160   | $13627.63 | $13769.57           |
 
 
 ## Troubleshooting <a name="troubleshooting"></a>
