@@ -13,6 +13,7 @@ The exponential growth of wireless communications markets around the world has a
   - [Network setup](#networksetup)
 - [Research Analysis](#ra)
   - [Cost Scaling](#cost)
+  - [Testing](#testing)
 - [Troubleshooting](#troubleshooting)
 - [Releases](#releases)
 - [Contributors](#contributors)
@@ -137,6 +138,13 @@ The final table documents how cost scales as _n_ nodes are added to the network.
 | 40    | $1402.54  | $1544.48            |
 | 160   | $13627.63 | $13769.57           |
 
+### Testing <a name="testing"></a>
+Testing is an important part in evaluating the success of the network. Identifying metrics of value is an obvious first step. The team identified the following metrics to test:
+- Power consumption - Tests document power consumption of the network by node during transmit and receive modes, and serve as a flexible estimate of expected power needs for a general network.
+- Sensor accuracy - The team compared the readings of the sensors in the network to those of state-of-the-art sensors.
+- % transmitted / % received - The team compared the amount of messages sent by the nodes to the amount received by the server. A chief concern was how scaling affects these statistics.
+- Range - Tests document how distance from the server affects % transmitted / % receive statistics. Based on these statistics, the team determined a maximum range of the network.
+Initial test results serve as benchmarks to improve upon.
 
 ## Troubleshooting <a name="troubleshooting"></a>
 ...
