@@ -103,8 +103,9 @@ def main():
         # clean up the message and split it up
         message = message.strip()
         message = message.split(':')
+        topic = message.pop(0)
 
-        client.publish(pub_topic_prefix + message[0], message[1], 1)
+        client.publish(pub_topic_prefix + topic, ':'.join(message), 1)
 
     # stop the thread
     client.loop_stop()
