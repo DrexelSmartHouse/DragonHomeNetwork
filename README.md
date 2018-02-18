@@ -1,6 +1,7 @@
 # DragonHomeNetwork
 
-The exponential growth of wireless communications markets around the world has allowed users from all corners of the globe to share data almost instantaneously. However, managing the collection and transmission of data from devices connected in small, confined networks presents major challenges. Automation, environmental analysis, and health and safety awareness are large areas of study that can benefit from Internet of Things (IoT) networks, but issues with compatibility, versatility, and cost inhibit implementation of such networks. The purpose of this project is to create an inexpensive, robust, low-power IoT sensor network to serve as an easily implementable model for individuals, communities, and cities. Additionally, the network can serve as a tool within other areas of research for experimentation and QA analysis. The foundation of this system was successfully created using Arduino-based processing in tandem with packet radios that communicate over sub-GHz frequency bands. Ethernet data packet management was done using MQ Telemetry Transport (MQTT) and data visualization was performed with Grafana and MATLAB. This network also utilizes InfluxDB to store and manage data effectively.
+The exponential growth of wireless communications markets around the world has allowed users from all corners of the globe to share data almost instantaneously. However, managing the collection and transmission of data from multiple devices connected in small, confined networks presents major challenges. The futuristic ideal of having millions of interconnected "things" (inanimate objects, devices, communities, and environments) that have the ability to sense, communicate, network, and produce mass amounts of data that can be utilized in a novel way is known as the Internet of Things (IoT). Automation, environmental analysis, and health and safety awareness are large areas of study that can benefit from IoT networks, but issues with compatibility, versatility, and cost inhibit implementation of such networks. The purpose of this project is to create an inexpensive, robust, low-power IoT sensor network to serve as an easily implementable model for individuals, communities, and cities. Additionally, the network can serve as a tool within other areas of research for experimentation and QA analysis. The foundation of this system was successfully created using Arduino-based processing in tandem with packet radios that communicate over sub-GHz frequency bands. Ethernet data packet management was done using MQ Telemetry Transport (MQTT) and data visualization was performed with Grafana and MATLAB. This network also utilizes InfluxDB to store and manage data effectively.
+
 
 ## Contents
 - [Quick start](#quickstart)
@@ -45,18 +46,19 @@ The following hardware is necessary to set up the network and connect one node:
 ...
 
 ### Network setup <a name="networksetup"></a>
-Below are the steps to initialize the server, gateway, and one node.
-1. Ethernet and gateway node setup.
+Below are the steps to initialize the server, gateway, and one sensor node.
+1. **Ethernet and Radio Gateway node setup**
 
-   Program Arduino firmware (which?) onto a sensor node without a sensor on it (fix wording). Connect this node via txrx serial to another Arduino with Ethernet shield. TODO Include images 288-89, 291-93.
+   Program Radio Gateway Arduino Uno with DragonHomeNetwork/Arduino/rfm69-network/gateway_uart_mqtt. This node recieves Radio transmissions from every sesnor node and forwards them to the Ethernet node vio Serial TX/RX. TODO Include images 288-89, 291-93.
 
-   Load Ethernet-enabled Arduino Uno with uart-mqtt script. This node receives serial information from the gateway and forwards information to the computer. In the uart_mqtt script, the user must enter the IP address of the mqtt server.
+   Program Ethernet-enabled Arduino Uno with DragonHomeNetwork/Arduino/rfm69-network/uart-mqtt script. This node receives Serial TX/RX information from the radio gateway and forwards information to the mqtt server via ethernet. In the uart_mqtt script, the user must enter the IP address of the mqtt server.
 
-   When uploading code onto either board, ensure there are no wires connected between them.
+   Connect both Arduino nodes to a wall power adapter to turn them on.
 
-   Program the gateway node with gateway_uart_mqtt script.
+   Connect pin 0 on the Ethernet Arduino to pin 1 on the radio gateway, and pin 0 on the radio gateway to pin 1 on the Ethernet Arduino. Connect the GND pin on the Ethernet arduino to the GND pin on the gateway arduino. This serves as the Serial TX/RX communication between the nodes.   
 
-   Connect transmit-receive, receive-transmit, common ground wires between the boards.
+   Note: When uploading code or powering on either board, ensure there are no wires connected between them (Remove TX/RX connection!).
+
 2. **Server setup.**
 
     Install mosquitto and mosquitto-clients, then enable mosquitto daemon:
@@ -67,13 +69,12 @@ Below are the steps to initialize the server, gateway, and one node.
     ```
 
     TODO Other software installs
-
-    Clone git repository for rfm69 manager and install dependencies.
-    NOTE: shouldn't cloning be unnecessary, since DataCollectionAndAnalysis is a dir in this repository now?
+    Make sure, if you haven't already, to clone this repository. Also install the other dependent software below.
     ```
-    git clone drexelsmarthouse/dir/to/data-collection-analysis
+    git clone https://github.com/DrexelSmartHouse/DragonHomeNetwork.git
     sudo apt-get install python-pip
     sudo pip install paho-mqtt
+    sudo apt-get install tmux
 
     ```
 
@@ -90,9 +91,11 @@ Below are the steps to initialize the server, gateway, and one node.
 
 3. **Sensor node setup**
 
-   Install simple dht library (how?).
+   Install simple dht library through the Arduino IDE.
 
-   In the dht11_sensor_node script, change the node id to match end node id. NOTE: Line number?
+   In the DragonHomeNetwork/Arduino/rfm69-network/dht11_sensor_node script, change the node_id (line 13) to match the number you wish to give the end node on the network. This variable helps you to identify where data is coming from when there are multiple sensor nodes on the network.
+
+   Upload this script to the sensor end node equipped with the DHT11 Temperature and Humidity sensor.
 
 ## Research Analysis <a name="ra"></a>
 ### Cost Scaling <a name="cost"></a>
