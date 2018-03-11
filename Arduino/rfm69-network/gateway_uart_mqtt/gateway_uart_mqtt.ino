@@ -251,7 +251,7 @@ void publishSensorReading()
  * parameters: string msg
  * return: void
  **************************************************************/
-void publishLogMsg(string msg)
+void publishLogMsg(String msg)
 {
   Serial.print(F("/log:"));
   Serial.print(msg);
