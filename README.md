@@ -11,12 +11,9 @@ The purpose of this project is to create an inexpensive, robust, low-power IoT s
   - [Necessary hardware](#necessaryhardware)
   - [Necessary tools](#necessarytools)
   - [Hardware setup](#hardwaresetup)
-    - [RFM69 Arduino](#rfm69arduino)
-    - [Ethernet Arduino](#ethernetarduino)
   - [Network setup](#networksetup)
 - [Research Analysis](#ra)
   - [Cost Scaling](#cost)
-  - [Testing](#testing)
 - [Releases](#releases)
 - [Contributors](#contributors)
 
@@ -24,20 +21,19 @@ The purpose of this project is to create an inexpensive, robust, low-power IoT s
 The completed network has the following features:
 - Modular addition and modification of sensors,
 - Low cost ($13.67 for the gateway node and $13.67 for each additional node on the network, with efficient cost scaling),
+- Power consumption: 102mA on standby, 205mA sending.
 - Packet transmission up to 200 meters.
 
 ## Quick start <a name="quickstart"></a>
 ### Necessary hardware <a name="necessaryhardware"></a>
 The following hardware is necessary to set up the network and connect one node:
-- (3) Arduino Uno
+- (2) Arduino Uno
 - (2) Arduino Proto Shield with Mini Breadboard
-- (1) Arduino Ethernet Shield
 - (2) RFM69HCW Wireless Transceiver - 915MHz
-- (2) 10Kohm through-hole resistors
+- (1) 10Kohm through-hole resistors
 - (1) DHT11 Temperature-Humidity sensor
-- (3) 9V 1A Arduino power supplies
+- (1) 9V 1A Arduino power supplies
 - (2) voltage/logic converters
-- (1) Ethernet cable
 - Solid core wires
 - Solder
 
@@ -48,29 +44,30 @@ The following hardware is necessary to set up the network and connect one node:
 - Internet-connected computer
 
 ### Hardware setup <a name="necessarytools"></a>
-#### RFM69 Arduino <a name="rfm69arduino"></a>
-...
 
-#### Ethernet Arduino <a name="ethernetarduino"></a>
-...
+Follow the below schematic to set up your nodes:
+todo include image.
+
 
 ### Network setup <a name="networksetup"></a>
-<!--  TODO update with one-node soln
--->
-Below are the steps to initialize the server, gateway, and one sensor node.
-1. **Ethernet and Radio Gateway node setup**
 
-   Program Radio Gateway Arduino Uno with DragonHomeNetwork/Arduino/rfm69-network/gateway_uart_mqtt. This node recieves Radio transmissions from every sesnor node and forwards them to the Ethernet node vio Serial TX/RX. TODO Include images 288-89, 291-93.
+Below are the steps to initialize the server, gateway and one sensor node.
 
-   Program Ethernet-enabled Arduino Uno with DragonHomeNetwork/Arduino/rfm69-network/uart-mqtt script. This node receives Serial TX/RX information from the radio gateway and forwards information to the mqtt server via ethernet. In the uart_mqtt script, the user must enter the IP address of the mqtt server.
+1. **Gateway node setup**
 
-   Connect both Arduino nodes to a wall power adapter to turn them on.
+   Program Radio Gateway Arduino Uno with `DragonHomeNetwork/Arduino/rfm69-network/gateway_uart_mqtt`. This node receives Radio transmissions from every sensor node and forwards them to the mqtt server via USB.
 
-   Connect pin 0 on the Ethernet Arduino to pin 1 on the radio gateway, and pin 0 on the radio gateway to pin 1 on the Ethernet Arduino. Connect the GND pin on the Ethernet arduino to the GND pin on the gateway arduino. This serves as the Serial TX/RX communication between the nodes.   
+   Connect the Arduino node to your server.
 
-   Note: When uploading code or powering on either board, ensure there are no wires connected between them (Remove TX/RX connection!).
 
 2. **Server setup.**
+
+    Open `bash` on your server to execute the following commands.
+
+    Clone the repository:
+    ```
+    git clone https://github.com/DrexelSmartHouse/DragonHomeNetwork.git
+    ```
 
     Install mosquitto and mosquitto-clients, then enable mosquitto daemon:
 
@@ -79,26 +76,31 @@ Below are the steps to initialize the server, gateway, and one sensor node.
     sudo systemctl enable mosquitto
     ```
 
-    TODO Other software installs
-    Make sure, if you haven't already, to clone this repository. Also install the other dependent software below.
+    Install the other dependent software below.
     ```
-    git clone https://github.com/DrexelSmartHouse/DragonHomeNetwork.git
     sudo apt-get install python-pip
     sudo pip install paho-mqtt
     sudo apt-get install tmux
 
     ```
 
-    Open a tmux session in the cloned DataCollectionAndAnalysis directory, edit the server config file, and run the script. NOTE: Line number?
+    Make sure that the mqtt server IP is the same as the IP address in `serial-to-mqtt.conf`, which can be accessed by the below instructions:
     ```
     cd /path/to/DataCollectionAndAnalysis
-    vim dshPython.config
-      Change server IP to 127.0.0.1
-    tmux new -s dsh
-    python ./rfm69_mqtt_manager.py
+    vim serial-to-mqtt.conf
     ```
 
-    Now you can view sweep and scan events, as well as the sensor data and log messages as they are generated. To leave the server running, type `CTRL+B d`. To bring the session back, type `tmux a`.
+    Open a tmux session in the cloned `DataCollectionAndAnalysis` directory and run the following scripts.
+
+    ```
+    tmux new -s dsh
+    ./rfm69_mqtt_manager.py
+    CTRL+B SHIFT+5 to open a parallel window.
+    ./rfm69-serial-to-mqtt.py
+    ```
+
+     Now you can view sweep and scan events, as well as the sensor data and log messages as they are generated. To leave the server running, type `CTRL+B d`. To bring the session back, type `tmux a`. To switch between parallel windows, type `CTRL+B` and use the arrow keys.
+
 
 3. **Sensor node setup**
 
@@ -108,8 +110,8 @@ Below are the steps to initialize the server, gateway, and one sensor node.
 
    Upload this script to the sensor end node equipped with the DHT11 Temperature and Humidity sensor.
 
-<!-- TODO end steps, approximate time
- -->
+   This node can be powered via USB or wall power. Once powered on, it will automatically send data to the server.
+
 
 ## Research Analysis <a name="ra"></a>
 ### Cost Scaling <a name="cost"></a>
@@ -137,13 +139,6 @@ The final table documents how cost scales as _n_ nodes are added to the network.
 | 100   | $1210.18  |
 | 500   | $6893.38  |
 
-### Testing <a name="testing"></a>
-Testing is an important part in evaluating the success of the network. Identifying metrics of value is an obvious first step. The team identified the following metrics to test:
-- Power consumption - Tests document power consumption of the network by node during transmit and receive modes, and serve as a flexible estimate of expected power needs for a general network.
-- Sensor accuracy - The team compared the readings of the sensors in the network to those of state-of-the-art sensors.
-- % transmitted / % received - The team compared the amount of messages sent by the nodes to the amount received by the server. A chief concern was how scaling affects these statistics.
-- Range - Tests document how distance from the server affects % transmitted / % receive statistics. Based on these statistics, the team determined a maximum range of the network.
-Initial test results serve as benchmarks to improve upon.
 
 ## Releases <a name="releases"></a>
 Not currently released.
