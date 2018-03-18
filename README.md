@@ -1,9 +1,12 @@
 # DragonHomeNetwork
 
-The exponential growth of wireless communications markets around the world has allowed users from all corners of the globe to share data almost instantaneously. However, managing the collection and transmission of data from multiple devices connected in small, confined networks presents major challenges. The futuristic ideal of having millions of interconnected "things" (inanimate objects, devices, communities, and environments) that have the ability to sense, communicate, network, and produce mass amounts of data that can be utilized in a novel way is known as the Internet of Things (IoT). Automation, environmental analysis, and health and safety awareness are large areas of study that can benefit from IoT networks, but issues with compatibility, versatility, and cost inhibit implementation of such networks. The purpose of this project is to create an inexpensive, robust, low-power IoT sensor network to serve as an easily implementable model for individuals, communities, and cities. Additionally, the network can serve as a tool within other areas of research for experimentation and QA analysis. The foundation of this system was successfully created using Arduino-based processing in tandem with packet radios that communicate over sub-GHz frequency bands. Ethernet data packet management was done using MQ Telemetry Transport (MQTT) and data visualization was performed with Grafana and MATLAB. This network also utilizes InfluxDB to store and manage data effectively.
+The exponential growth of wireless communications markets around the world has allowed users from all corners of the globe to share data almost instantaneously. However, managing the collection and transmission of data from multiple devices connected in small, confined networks presents major challenges. The futuristic ideal of having millions of interconnected "things" (inanimate objects, devices, communities, and environments) that have the ability to sense, communicate, network, and produce mass amounts of data that can be utilized in a novel way is known as the Internet of Things (IoT). Automation, environmental analysis, and health and safety awareness are large areas of study that can benefit from IoT networks, but issues with compatibility, versatility, and cost inhibit implementation of such networks.
+
+The purpose of this project is to create an inexpensive, robust, low-power IoT sensor network to serve as an easily implementable model for individuals, communities, and cities. Additionally, the network can serve as a tool within other areas of research for experimentation and QA analysis. The foundation of this system was successfully created using Arduino-based processing in tandem with packet radios that communicate over sub-GHz frequency bands. Ethernet data packet management was done using MQ Telemetry Transport (MQTT) and data visualization was performed with Grafana and MATLAB. This network also utilizes InfluxDB to store and manage data effectively.
 
 
 ## Contents
+- [Features](#features)
 - [Quick start](#quickstart)
   - [Necessary hardware](#necessaryhardware)
   - [Necessary tools](#necessarytools)
@@ -14,9 +17,14 @@ The exponential growth of wireless communications markets around the world has a
 - [Research Analysis](#ra)
   - [Cost Scaling](#cost)
   - [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
 - [Releases](#releases)
 - [Contributors](#contributors)
+
+## Features <a name="features"></a>
+The completed network has the following features:
+- Modular addition and modification of sensors,
+- Low cost ($13.67 for the gateway node and $13.67 for each additional node on the network, with efficient cost scaling),
+- Packet transmission up to 200 meters.
 
 ## Quick start <a name="quickstart"></a>
 ### Necessary hardware <a name="necessaryhardware"></a>
@@ -47,6 +55,8 @@ The following hardware is necessary to set up the network and connect one node:
 ...
 
 ### Network setup <a name="networksetup"></a>
+<!--  TODO update with one-node soln
+-->
 Below are the steps to initialize the server, gateway, and one sensor node.
 1. **Ethernet and Radio Gateway node setup**
 
@@ -98,45 +108,34 @@ Below are the steps to initialize the server, gateway, and one sensor node.
 
    Upload this script to the sensor end node equipped with the DHT11 Temperature and Humidity sensor.
 
+<!-- TODO end steps, approximate time
+ -->
+
 ## Research Analysis <a name="ra"></a>
 ### Cost Scaling <a name="cost"></a>
 The following table documents the cost of the core of the network - the Ethernet and gateway nodes.
 
-| Component                                                                   | Quantity | Price   |
-|-----------------------------------------------------------------------------|----------|---------|
-| [Arduino Uno]("http://amzn.to/2o2KFku")                                     | 2        | $15.98  |
-|  [Proto Shield with Mini Breadboard]("http://amzn.to/2H5cfGe")              | 1        | $7.99   |
-| [RFM69HCW Wireless Transciever - 915MHz (4 pack)]("http://amzn.to/2nYT9sM") | 1        | $21.95  |
-| [10Kohm Resistor (400-pack)]("http://amzn.to/2BqvdXk")                      | 1        | $8.65   |
-| [9V 1A Arduino Power Supply]("http://amzn.to/2EWiUSA")                      | 1        | $6.99   |
-| [Voltage/logic converter]("http://amzn.to/2EWT3tM")                         | 1        | $5.39   |
-| [Solid core wire (ft)]("http://amzn.to/2BSlPgd")                            | 2        | $39.99  |
-| [Ethernet Shield]("http://bit.ly/2EPkiZq")                                  | 1        | $32.50  |
-| [3ft Ethernet cable]("http://bit.ly/2C3T68h")                               | 1        | $2.50   |
-| Total                                                                       |          | $141.94 |
+| Component                                                                   | Price   |
+|-----------------------------------------------------------------------------|---------|
+| [Arduino Uno]("https://www.aliexpress.com/item/Free-shipping-high-quality-UNO-R3-MEGA328P-CH340G-for-Arduino-Compatible-NO-USB-CABLE/32231525607.html?spm=2114.search0104.3.286.65936d00tZ2ORH&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711212_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711313_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=20dba46e-7254-40ef-8ecb-a8b02234de01-45&algo_pvid=20dba46e-7254-40ef-8ecb-a8b02234de01&transAbTest=ae803_5&priceBeautifyAB=0")                                     | $3.05  |
+|  [Proto Shield with Mini Breadboard]("https://www.aliexpress.com/item/Newbrand-Prototyping-Prototype-Shield-ProtoShield-Mini-Breadboard-for-Arduino-Free-Shipping/32279103685.html?spm=2114.search0104.3.112.2fb358f9cm0yb2&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711212_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5722413_5711312,searchweb201603_2,ppcSwitch_5&algo_expid=c98ab005-6807-4240-8d2e-648ed088282c-19&algo_pvid=c98ab005-6807-4240-8d2e-648ed088282c&transAbTest=ae803_5&priceBeautifyAB=0")              | $1.10   |
+| [RFM69HCW Wireless Transciever - 915MHz (4 pack)]("https://www.aliexpress.com/item/RFM69HCW-frequency-transceiver-module-433-868-915MHZ-can-be-selected/32723542589.html?spm=2114.search0104.3.1.aaa7698dOttIEv&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711211_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711311_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=62be832f-9626-4ba1-a45e-ef94174177e5-0&algo_pvid=62be832f-9626-4ba1-a45e-ef94174177e5&transAbTest=ae803_5&priceBeautifyAB=0") | $2.15  |
+| [10Kohm Resistor (100-pack)]("https://www.aliexpress.com/item/100pcs-RoHS-Lead-Free-Metal-Film-Resistor-1-6W-Watts-10K-ohm-10KR-1-Tolerance-Precision/1852552440.html?spm=2114.search0104.3.16.3af73fccKp6mC7&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711212_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711313_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=094f4518-adbe-4560-8d76-4bb5bbc8398d-2&algo_pvid=094f4518-adbe-4560-8d76-4bb5bbc8398d&transAbTest=ae803_5&priceBeautifyAB=0")                      | $0.69   |
+| [9V 1A Arduino Power Supply]("https://www.aliexpress.com/item/US-Plug-9V-1A-Switching-Power-Supply-Converter-Adapter-Wall-Charger-4-0mmx1-7mm/32849270931.html?spm=2114.search0104.3.109.c56333bd76YIdY&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711213_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711313_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=22c8c7c1-85ab-437a-bb54-977e7bd0358f-16&algo_pvid=22c8c7c1-85ab-437a-bb54-977e7bd0358f&transAbTest=ae803_5&priceBeautifyAB=0")                      | $2.08   |
+| [Voltage/logic converter]("https://www.aliexpress.com/item/4-channel-IIC-I2C-Logic-Level-Converter-Bi-Directional-Module-5V-to-3-3V-For-Arduino/32310628741.html?spm=2114.search0104.3.44.2cbb4b4cdcwCWG&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711211_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_5722412_10620_5711311,searchweb201603_2,ppcSwitch_5&algo_expid=d1208a18-bef2-48d7-8cd7-04bda35e2558-6&algo_pvid=d1208a18-bef2-48d7-8cd7-04bda35e2558&transAbTest=ae803_5&priceBeautifyAB=0")                         | $0.28   |
+| [Solid core wire]("https://www.aliexpress.com/item/Tinned-copper-22AWG-2-pin-Red-Black-cable-PVC-insulated-wire-22-awg-wire-Electric-cable/32597557917.html?spm=2114.search0104.3.2.2f6215c6LjDKMM&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711213_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711313_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=34901f3e-f79f-4489-9022-3fd66b59f083-0&algo_pvid=34901f3e-f79f-4489-9022-3fd66b59f083&transAbTest=ae803_5&priceBeautifyAB=0")                            | $0.48  |
+| Total (+ shipping)                                               | $13.67 |
 
-The next table documents the cost of an additional node.
 
-| Component                                                                   | Quantity | Cost   |
-|-----------------------------------------------------------------------------|----------|--------|
-| [Arduino Uno]("http://amzn.to/2o2KFku")                                     | 1        | $7.99  |
-|  [Proto Shield with Mini Breadboard]("http://amzn.to/2H5cfGe")              | 1        | $7.99  |
-| [RFM69HCW Wireless Transciever - 915MHz (4 pack)]("http://amzn.to/2nYT9sM") | 1        | $21.95 |
-| [10Kohm Resistor (400-pack)]("http://amzn.to/2BqvdXk")                      | 1        | $8.65  |
-| [9V 1A Arduino Power Supply]("http://amzn.to/2EWiUSA")                      | 1        | $6.99  |
-| [Voltage/logic converter]("http://amzn.to/2EWT3tM")                         | 1        | $5.39  |
-| [Solid core wire (ft)]("http://amzn.to/2BSlPgd")                            | 2        | $39.99 |
-| Total                                                                       |          | $98.95 |
 
 The final table documents how cost scales as _n_ nodes are added to the network.
 
-| Nodes | Cost      |  Network total cost |
-|-------|-----------|---------------------|
-| 1     | $98.95    | $240.89             |
-| 4     | $184.03   | $325.97             |
-| 16    | $590.20   | $732.14             |
-| 40    | $1402.54  | $1544.48            |
-| 160   | $13627.63 | $13769.57           |
+| Nodes | Cost      |
+|-------|-----------|
+| 1     | $13.67    |
+| 10    | $106.28   |
+| 100   | $1210.18  |
+| 500   | $6893.38  |
 
 ### Testing <a name="testing"></a>
 Testing is an important part in evaluating the success of the network. Identifying metrics of value is an obvious first step. The team identified the following metrics to test:
@@ -145,9 +144,6 @@ Testing is an important part in evaluating the success of the network. Identifyi
 - % transmitted / % received - The team compared the amount of messages sent by the nodes to the amount received by the server. A chief concern was how scaling affects these statistics.
 - Range - Tests document how distance from the server affects % transmitted / % receive statistics. Based on these statistics, the team determined a maximum range of the network.
 Initial test results serve as benchmarks to improve upon.
-
-## Troubleshooting <a name="troubleshooting"></a>
-...
 
 ## Releases <a name="releases"></a>
 Not currently released.
