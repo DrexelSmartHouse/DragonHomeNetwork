@@ -4,20 +4,20 @@
 * The node polls for a request from the gateway for sensor 
 * data and then responds to request.
 **************************************************************/
-#include "RFM69.h"
+#include <SPI.h>
+#include <RH_RF69.h>
 #include <Wire.h>
 #include "Adafruit_MCP9808.h"
+#include <RHReliableDatagram.h>
 
-#define IS_RFM69HW_HCW
-//*********************************************************************************************
-//Auto Transmission Control - dials down transmit power to save battery
-//Usually you do not need to always transmit at max output power
-//By reducing TX power even a little you save a significant amount of battery power
-//This setting enables this gateway to work with remote nodes that have ATC enabled to
-//dial their power down to only the required level (ATC_RSSI)
-//#define ENABLE_ATC //comment out this line to disable AUTO TRANSMISSION CONTROL
-//#define ATC_RSSI -80
-RFM69 dsh_radio;
+#define CLIENT_ADDRESS 1
+#define SERVER_ADDRESS 2
+
+// Singleton instance of the radio driver
+RH_RF69 driver;
+
+// Class to manage message delivery and receipt, using the driver declared above
+RHReliableDatagram manager(driver, CLIENT_ADDRESS);
 
 // Create the MCP9808 temperature sensor object
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
@@ -26,160 +26,82 @@ Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 const uint8_t NODE_ID = 1;
 const uint8_t NETWORK_ID = 0;
 
-const long sensor_interval = 1500;
-
-const uint8_t DHT11_pin = 4;
-byte temp = -1;
-byte humidity = -1;
-int rssi = 0;
-
-//var for time
-long previous_time = 0;
-
-enum request_types
-{
-  ALL,
-  TEMPC,
-  HUM,
-  RSSIDAT,
-  BAD_REQUEST,
-  NONE
-};
-
 String data = "";
-request_types current_request = NONE;
 
 /**************************************************************
 * Function: setup
 * ------------------------------------------------------------ 
-* summary: Initializes serial and dsh_radio
+* summary: Initializes serial and RFM69 radio, as well as the radio manager
 * parameters: void
 * return: void
 **************************************************************/
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
-  dsh_radio.initialize(RF69_915MHZ, NODE_ID, NETWORK_ID);
-  dsh_radio.setHighPower();
-  dsh_radio.setPowerLevel(31);
+  if (!manager.init())
+    Serial.println("init failed");
+
+  // Defaults after init are 434.0MHz, modulation GFSK_Rb250Fd250, +13dbM (for low power module)
+  if (!driver.setFrequency(915.0))
+    Serial.println("setFrequency failed");
+
+  // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power with the
+  // ishighpowermodule flag set like this:
+  driver.setTxPower(14, true);
+
+  // The encryption key has to be the same as the one in the server
+  uint8_t key[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                   0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+  driver.setEncryptionKey(key);
 
   if (!tempsensor.begin())
   {
     Serial.println("Couldn't find MCP9808!");
   }
-  else
-  {
-    Serial.println("Found MCP9808!");
-  }
-  Serial.println(dsh_radio.getFrequency());
 
   // Read and print out the temperature, then convert to *F
-  float c = tempsensor.readTempC();
-  float f = c * 9.0 / 5.0 + 32;
+  float f = tempsensor.readTempF();
   Serial.print("Temp: ");
-  Serial.print(c);
-  Serial.print("*C\t");
   Serial.print(f);
-  Serial.println("*F");
-
+  Serial.print("*F");
   float temp = 0;
-
-  Serial.println(dsh_radio.canSend());
 }
+
+// Dont put this on the stack:
+uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
 
 /**************************************************************
 * Function: loop
 * ------------------------------------------------------------ 
-* summary: Loop polls for a request. If a request is received,
-* it is parsed and sent through a switch to handle the request.
+* summary: Loop sends a set of data at a specific time interval
 * parameters: void
 * return: void
 **************************************************************/
 void loop()
 {
+  data = String("RSSI:") + driver.rssiRead() + "," + "TEMPF:" + tempsensor.readTempF();
 
-  if (dsh_radio.receiveDone())
+  // Send a message to manager_server
+  if (manager.sendtoWait(reinterpret_cast<uint8_t *>(&data[0]), sizeof(data), SERVER_ADDRESS))
   {
-
-    Serial.println("Transmission Received");
-
-    if (dsh_radio.receiveDone())
+    // Now wait for a reply from the server
+    uint8_t len = sizeof(buf);
+    uint8_t from;
+    if (manager.recvfromAckTimeout(buf, &len, 2000, &from))
     {
-      Serial.println("" + String(dsh_radio.readRSSI()));
-      for (byte i = 0; i < dsh_radio.DATALEN; i++)
-      {
-        data += (char)dsh_radio.DATA;
-      }
-      if (data.equals("ALL"))
-        current_request = ALL;
-      else if (data.equals("HUM"))
-        current_request = HUM;
-      else if (data.equals("TEMPC"))
-        current_request = TEMPC;
-      else if (data.equals("RSSIDAT"))
-        current_request = RSSIDAT;
-      else
-        current_request = BAD_REQUEST;
+      Serial.print("got reply from : 0x");
+      Serial.print(from, HEX);
+      Serial.print(": ");
+      Serial.println((char *)buf);
     }
-
-    if (dsh_radio.ACKRequested())
+    else
     {
-      dsh_radio.sendACK();
-      Serial.println("ACK sent");
+      Serial.println("No reply, is rf69_reliable_datagram_server running?");
     }
   }
-
-  switch (current_request)
-  {
-  case NONE:
-    break;
-
-  case BAD_REQUEST:
-    dsh_radio.sendWithRetry(1, "BAD_REQUEST", 12);
-    current_request = NONE;
-    break;
-
-  case ALL:
-    temp = tempsensor.readTempC();
-    Serial.println("Sending all sensor Data");
-
-    if (!dsh_radio.sendSensorReading("TEMPC", temp))
-    {
-      dsh_radio.sendError("TEMPC SEND");
-      Serial.println("Temp Transmission Failed");
-      current_request = NONE;
-      break;
-    }
-
-    if (!dsh_radio.sendSensorReading("RSSIDAT", dsh_radio.readRSSI()))
-    {
-      dsh_radio.sendError("RSSI SEND");
-      Serial.println("RSSI Transmission Failed");
-      current_request = NONE;
-      break;
-    }
-
-    dsh_radio.sendEnd();
-    current_request = NONE;
-    break;
-
-  case TEMPC:
-    temp = tempsensor.readTempC();
-    if (!dsh_radio.sendSensorReading("TEMPC", temp) || temp >= 50)
-      Serial.println("Temp Transmission Failed" + temp);
-    dsh_radio.sendEnd();
-    current_request = NONE;
-    break;
-
-  case RSSIDAT:
-    if (!dsh_radio.sendSensorReading("RSSI", dsh_radio.readRSSI()))
-      Serial.println("RSSI Transmission Failed");
-    dsh_radio.sendEnd();
-    current_request = NONE;
-    break;
-
-  default:
-    current_request = NONE;
-  }
+  else
+    Serial.println("sendtoWait failed");
+  // Sends data every minute
+  delay(60000);
 }
