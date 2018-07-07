@@ -30,10 +30,7 @@ void publishSensorReading();
 void publishLogMsg(String msg);
 void restartTimer();
 bool timeOut();
-bool incrementCurrNodeID();
-bool requestAllFromNextNode();
-void startNetworkSweep();
-void networkScan();
+
 
 /**************************************************************
  * Function: setup
@@ -55,7 +52,11 @@ void setup()
     Serial.println("setFrequency failed");
   driver.setTxPower(14, true);
 
-  networkScan();
+    // The encryption key has to be the same as the one in the client
+  uint8_t key[] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+  driver.setEncryptionKey(key);
+  
 }
 uint8_t data[] = "And hello back to you";
 // Dont put this on the stack:
@@ -82,125 +83,13 @@ void loop()
       Serial.print("got request from : 0x");
       Serial.print(from, HEX);
       Serial.print(": ");
-      Serial.println((char *)buf);
-
-      for (byte i = 0; i < len; i++)
-      {
-        data[i] = (char)buf;
-        Serial.print(data[i]);
-      }
+      Serial.println((char *)buf);  
 
       // Send a reply back to the originator client
       if (!manager.sendtoWait(data, sizeof(data), from))
         Serial.println("sendtoWait failed");
     }
   }
-}
-
-/**************************************************************
- * Function: serialEvent
- * ------------------------------------------------------------ 
- * summary: handles commands received over serial 
- * parameters: void
- * return: void
- **************************************************************/
-void serialEvent()
-{
-
-  String cmd = Serial.readStringUntil('\n');
-  cmd.trim();
-  cmd.toUpperCase();
-
-  // check for NETID command
-  if (cmd == "NETID")
-  {
-    Serial.print(SERVER_ADDRESS);
-    Serial.print('\n');
-    return;
-  }
-
-  // echo the command for the log
-  publishLogMsg("COMMAND: " + cmd);
-
-  /* Parse the command */
-
-  // check for a multpart cmd
-  int8_t delim_pos = cmd.indexOf(':');
-  if (delim_pos != -1)
-  {
-
-    // follows one of two patterns
-    // request {node id}:{str request}
-    // or event {node id}:EVENT:{str event}
-
-    // parse the node id from beginning
-    uint8_t node_id = cmd.toInt();
-
-    if (node_id != 0)
-    {
-      // chop off the number and collon from the front
-      cmd = cmd.substring(delim_pos + 1);
-
-      delim_pos = cmd.indexOf(':');
-
-      // check for event
-      if (delim_pos != -1)
-      {
-
-        // it is an event so send it
-        if (cmd.substring(0, delim_pos) == "EVENT")
-        {
-          //dsh_radio.sendEvent();
-          return;
-        }
-      }
-
-      // send the
-
-      return;
-    }
-  }
-
-  // check for SWEEP command
-  if (cmd == "SWEEP")
-  {
-    startNetworkSweep();
-    return;
-  }
-
-  // update the list of nodes that are up
-  if (cmd == "SCAN")
-  {
-    networkScan();
-    return;
-  }
-
-  // clear all vars and update the list of nodes
-  if (cmd == "RESET")
-  {
-    receiving = false;
-    sweep_mode = false;
-    current_node_id = 0;
-    networkScan();
-    return;
-  }
-
-  if (cmd == "STATUS")
-  {
-    if (sweep_mode)
-      publishLogMsg("STATUS: SWEEPING");
-    else if (receiving)
-      publishLogMsg("STATUS: RECEIVING");
-    else
-      publishLogMsg("STATUS: OK");
-    return;
-  }
-
-  // TODO: parse commands for specfic nodes
-  // they would follow the format {node id}:{request}
-  // NOTE: request == "" and request == "ALL" both mean request all data
-
-  publishLogMsg("ERROR: BAD COMMAND");
 }
 
 /**************************************************************

@@ -26,7 +26,12 @@ Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 const uint8_t NODE_ID = 1;
 const uint8_t NETWORK_ID = 0;
 
+float f = 0;
+
 String data = "";
+
+// Function prototypes
+float celciusToFahrenheit(float c);
 
 /**************************************************************
 * Function: setup
@@ -61,11 +66,10 @@ void setup()
   }
 
   // Read and print out the temperature, then convert to *F
-  float f = tempsensor.readTempF();
+  f = celciusToFahrenheit(tempsensor.readTempC());
   Serial.print("Temp: ");
   Serial.print(f);
-  Serial.print("*F");
-  float temp = 0;
+  Serial.print("*F\n");
 }
 
 // Dont put this on the stack:
@@ -80,10 +84,14 @@ uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
 **************************************************************/
 void loop()
 {
-  data = String("RSSI:") + driver.rssiRead() + "," + "TEMPF:" + tempsensor.readTempF();
+
+  data = "RSSI:"; 
+  data += driver.rssiRead();
+  data += ",TEMPF:";
+  data += celciusToFahrenheit(tempsensor.readTempC());
 
   // Send a message to manager_server
-  if (manager.sendtoWait(reinterpret_cast<uint8_t *>(&data[0]), sizeof(data), SERVER_ADDRESS))
+  if (manager.sendtoWait(reinterpret_cast<uint8_t *>(&data), sizeof(data), SERVER_ADDRESS))
   {
     // Now wait for a reply from the server
     uint8_t len = sizeof(buf);
@@ -92,16 +100,21 @@ void loop()
     {
       Serial.print("got reply from : 0x");
       Serial.print(from, HEX);
-      Serial.print(": ");
+      Serial.print(": \n");
       Serial.println((char *)buf);
     }
     else
     {
-      Serial.println("No reply, is rf69_reliable_datagram_server running?");
+      Serial.println("No reply, is rf69_reliable_datagram_server running?\n");
     }
   }
   else
-    Serial.println("sendtoWait failed");
+    Serial.println("sendtoWait failed\n");
   // Sends data every minute
   delay(60000);
+}
+
+float celciusToFahrenheit(float c)
+{
+  return (c * 9.0) / 5.0 + 32;
 }
