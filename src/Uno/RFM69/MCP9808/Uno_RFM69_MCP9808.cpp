@@ -11,7 +11,7 @@
 #include <RHReliableDatagram.h>
 
 #define CLIENT_ADDRESS 1
-#define SERVER_ADDRESS 2
+#define SERVER_ADDRESS 0
 
 // Singleton instance of the radio driver
 RH_RF69 driver;
@@ -26,13 +26,10 @@ Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 const uint8_t NODE_ID = 1;
 const uint8_t NETWORK_ID = 0;
 
-float f = 0;
-
-String data = "";
+int8_t f = 0;
 
 // Function prototypes
-float celciusToFahrenheit(float c);
-
+int8_t celciusToFahrenheit(int8_t c);
 /**************************************************************
 * Function: setup
 * ------------------------------------------------------------ 
@@ -71,9 +68,9 @@ void setup()
   Serial.print(f);
   Serial.print("*F\n");
 }
-
 // Dont put this on the stack:
 uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+uint8_t data[sizeof(buf)];
 
 /**************************************************************
 * Function: loop
@@ -84,14 +81,17 @@ uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
 **************************************************************/
 void loop()
 {
-
-  data = "RSSI:"; 
-  data += driver.rssiRead();
-  data += ",TEMPF:";
-  data += celciusToFahrenheit(tempsensor.readTempC());
-
+  //uint8_t data[] = "Hello World!";
+  strcpy((char *)data, "RSSI:");
+  char buffer[10];
+  itoa(driver.rssiRead(), buffer, 10);
+  strcat((char *)data, buffer);
+  strcat((char *)data, ",TEMPF:");
+  itoa(celciusToFahrenheit(tempsensor.readTempC()), buffer, 10);
+  strcat((char *)data, buffer);
+  strcat((char *)data, '\0');
   // Send a message to manager_server
-  if (manager.sendtoWait(reinterpret_cast<uint8_t *>(&data), sizeof(data), SERVER_ADDRESS))
+  if (manager.sendtoWait(data, sizeof(data), SERVER_ADDRESS))
   {
     // Now wait for a reply from the server
     uint8_t len = sizeof(buf);
@@ -99,7 +99,7 @@ void loop()
     if (manager.recvfromAckTimeout(buf, &len, 2000, &from))
     {
       Serial.print("got reply from : 0x");
-      Serial.print(from, HEX);
+      Serial.print(from, DEC);
       Serial.print(": \n");
       Serial.println((char *)buf);
     }
@@ -111,10 +111,10 @@ void loop()
   else
     Serial.println("sendtoWait failed\n");
   // Sends data every minute
-  delay(60000);
+  delay(10000);
 }
 
-float celciusToFahrenheit(float c)
+int8_t celciusToFahrenheit(int8_t c)
 {
   return (c * 9.0) / 5.0 + 32;
 }

@@ -9,8 +9,7 @@
 #include <RH_RF69.h>
 #include <SPI.h>
 
-#define CLIENT_ADDRESS 1
-#define SERVER_ADDRESS 2
+#define SERVER_ADDRESS 0
 
 // Singleton instance of the radio driver
 RH_RF69 driver;
@@ -30,7 +29,6 @@ void publishSensorReading();
 void publishLogMsg(String msg);
 void restartTimer();
 bool timeOut();
-
 
 /**************************************************************
  * Function: setup
@@ -52,15 +50,16 @@ void setup()
     Serial.println("setFrequency failed");
   driver.setTxPower(14, true);
 
-    // The encryption key has to be the same as the one in the client
-  uint8_t key[] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-                    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+  // The encryption key has to be the same as the one in the client
+  uint8_t key[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                   0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
   driver.setEncryptionKey(key);
-  
 }
 uint8_t data[] = "And hello back to you";
 // Dont put this on the stack:
 uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+uint8_t dataRec[sizeof(buf)];
+char *vals;
 
 /**************************************************************
  * Function: loop
@@ -78,40 +77,30 @@ void loop()
     // Wait for a message addressed to us from the client
     uint8_t len = sizeof(buf);
     uint8_t from;
+    Serial.println(driver.rssiRead());
     if (manager.recvfromAck(buf, &len, &from))
     {
-      Serial.print("got request from : 0x");
-      Serial.print(from, HEX);
-      Serial.print(": ");
-      Serial.println((char *)buf);  
-
+      vals = strtok((char *)buf, ",:");
+      while (vals != NULL)
+      {
+        Serial.print("RFM69/");
+        Serial.print(SERVER_ADDRESS, DEC);
+        Serial.print('/');
+        Serial.print(from, DEC);
+        Serial.print('/');
+        Serial.print(vals);
+        Serial.print('/');
+        vals = strtok(NULL, ",:");
+        Serial.print(vals);
+        Serial.print('/');
+        vals = strtok(NULL, ",:");
+        Serial.print('\n');
+      }
       // Send a reply back to the originator client
       if (!manager.sendtoWait(data, sizeof(data), from))
         Serial.println("sendtoWait failed");
     }
   }
-}
-
-/**************************************************************
- * Function: publishSensorReading
- * ------------------------------------------------------------ 
- * summary: sends sensor reading over serial 
- * structure: /{node id}/{sensor type}:{data}\n
- * example: /1/TEMPC:40.1
- * parameters: void
- * return: void
- **************************************************************/
-void publishSensorReading()
-{
-
-  Serial.print('/');
-  Serial.print(CLIENT_ADDRESS);
-  Serial.print('/');
-  //TODO: Fix sensor type and sensor data parsing through serial
-  Serial.print("SENSOR TYPE HERE");
-  Serial.print(':');
-  Serial.print("SENSOR DATA HERE");
-  Serial.print('\n');
 }
 
 /**************************************************************
