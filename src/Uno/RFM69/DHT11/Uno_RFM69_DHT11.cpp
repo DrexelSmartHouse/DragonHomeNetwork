@@ -4,14 +4,14 @@
 * The node polls for a request from the gateway for sensor 
 * data and then responds to request.
 **************************************************************/
-#include "RFM69_DSH.h"
+#include "RFM69.h"
 #include <SimpleDHT.h>
 
-RFM69_DSH dsh_radio;
+RFM69 dsh_radio;
 
 //Change depending on the node number programmed
-const uint8_t node_id = 10;
-const uint8_t network_id = 0;
+const uint8_t NODE_ID = 10;
+const uint8_t NETWORK_ID = 0;
 
 //const long sensor_interval = 1500;
 
@@ -36,6 +36,9 @@ enum request_types {
 
 request_types current_request = NONE;
 
+
+
+
 /**************************************************************
 * Function: setup
 * ------------------------------------------------------------ 
@@ -46,9 +49,7 @@ request_types current_request = NONE;
 void setup()
 {
 	Serial.begin(115200);
-
-	dsh_radio.initialize(RF69_915MHZ, node_id, network_id);
-	//dsh_radio.setHighPower(false);
+	dsh_radio.initialize(RF69_915MHZ, NODE_ID, NETWORK_ID);
 	dsh_radio.setHighPower();
 }
 
