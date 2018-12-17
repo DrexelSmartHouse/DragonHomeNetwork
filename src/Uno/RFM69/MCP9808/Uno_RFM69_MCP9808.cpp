@@ -10,7 +10,7 @@
 #include "Adafruit_MCP9808.h"
 #include <RHReliableDatagram.h>
 
-#define CLIENT_ADDRESS 1
+#define CLIENT_ADDRESS 9
 #define SERVER_ADDRESS 0
 
 // Singleton instance of the radio driver
@@ -23,7 +23,7 @@ RHReliableDatagram manager(driver, CLIENT_ADDRESS);
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 
 //Change depending on the node number programmed
-const uint8_t NODE_ID = 1;
+const uint8_t NODE_ID = 10;
 const uint8_t NETWORK_ID = 0;
 
 int8_t f = 0;

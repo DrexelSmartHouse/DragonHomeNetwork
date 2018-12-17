@@ -13,7 +13,7 @@ RFM69_DSH dsh_radio;
 const uint8_t node_id = 10;
 const uint8_t network_id = 0;
 
-const long sensor_interval = 1500;
+//const long sensor_interval = 1500;
 
 const uint8_t DHT11_pin = 4;
 byte temp = -1;
