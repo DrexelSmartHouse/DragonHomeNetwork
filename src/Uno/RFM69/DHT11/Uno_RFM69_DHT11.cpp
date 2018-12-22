@@ -126,7 +126,7 @@ int8_t celciusToFahrenheit(int8_t c)
 void printTempF()
 {
   Serial.print("Temp: ");
-  dht11.read(DHT11_pin, &temp, &humidity, NULL)
+  dht11.read(DHT11_pin, &temp, &humidity, NULL);
   Serial.print(celciusToFahrenheit(temp));
   Serial.print("*F\n");
 }
