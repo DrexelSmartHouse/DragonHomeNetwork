@@ -1,156 +1,134 @@
 
 /**************************************************************
 * Arduino file to create a node for the DragonHome Network.
-* The node polls for a request from the gateway for sensor 
-* data and then responds to request.
+* The node sends data to the gateway at a given time interval.
 **************************************************************/
-#include "RFM69.h"
+#include <SPI.h>
+#include <RH_RF69.h>
+#include <Wire.h>
 #include <SimpleDHT.h>
+#include <RHReliableDatagram.h>
 
-RFM69 dsh_radio;
+#define CLIENT_ADDRESS 3
+#define SERVER_ADDRESS 0
 
-//Change depending on the node number programmed
-const uint8_t NODE_ID = 10;
-const uint8_t NETWORK_ID = 0;
+// Singleton instance of the radio driver
+RH_RF69 driver;
 
-//const long sensor_interval = 1500;
+// Class to manage message delivery and receipt, using the driver declared above
+RHReliableDatagram manager(driver, CLIENT_ADDRESS);
 
+// Create the MCP9808 temperature sensor object ----------------------
+//Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
+
+//Create DHT11 dht11 object
 const uint8_t DHT11_pin = 4;
 byte temp = -1;
 byte humidity = -1;
-int rssi = 0;
-
 SimpleDHT11 dht11;
 
-//var for time
-long previous_time = 0;
-
-enum request_types {
-  ALL,
-  TEMPC,
-  HUM,
-  RSSIDAT,
-  BAD_REQUEST,
-  NONE
-};
-
-request_types current_request = NONE;
-
-
-
-
+// Function prototypes
+int8_t celciusToFahrenheit(int8_t c);
+void printTempF();
 /**************************************************************
 * Function: setup
 * ------------------------------------------------------------ 
-* summary: Initializes serial and dsh_radio
+* summary: Initializes serial and RFM69 radio, as well as the radio manager
 * parameters: void
 * return: void
 **************************************************************/
 void setup()
 {
-	Serial.begin(115200);
-	dsh_radio.initialize(RF69_915MHZ, NODE_ID, NETWORK_ID);
-	dsh_radio.setHighPower();
+  Serial.begin(9600);
+
+  if (!manager.init())
+    Serial.println("init failed");
+
+  // Defaults after init are 434.0MHz, modulation GFSK_Rb250Fd250, +13dbM (for low power module)
+  if (!driver.setFrequency(915.0))
+    Serial.println("setFrequency failed");
+
+  // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power with the
+  // ishighpowermodule flag set like this:
+  driver.setTxPower(14, true);
+
+  // The encryption key has to be the same as the one in the server
+  uint8_t key[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                   0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+  driver.setEncryptionKey(key);
+
+  printTempF();
 }
+
+uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
+char data[RH_RF69_MAX_MESSAGE_LEN];
+char buffer[10];
 
 /**************************************************************
 * Function: loop
 * ------------------------------------------------------------ 
-* summary: Loop polls for a request. If a request is received,
-* it is parsed and sent through a switch to handle the request.
+* summary: Loop sends a set of data at a specific time interval
 * parameters: void
 * return: void
 **************************************************************/
 void loop()
 {
-  
-	if (dsh_radio.receiveDone()) {
-
-		Serial.println("Transmission Received");
-
-		
-    if (dsh_radio.requestReceived()) {
-      Serial.println("" + String(dsh_radio.readRSSI()));
-      if (dsh_radio.requestAllReceived())
-        current_request = ALL;
-      else if (dsh_radio.getReceivedStr() == "HUM")
-        current_request = HUM;
-      else if (dsh_radio.getReceivedStr() == "TEMPC")
-        current_request = TEMPC;
-      else if (dsh_radio.getReceivedStr() == "RSSIDAT")
-        current_request = RSSIDAT;
-      else
-        current_request = BAD_REQUEST;
+  strcpy(data, "RSSI:");
+  itoa(driver.rssiRead(), buffer, 10);
+  strcat(data, buffer);
+  strcat(data, ",TEMPF:");
+  dht11.read(DHT11_pin, &temp, &humidity, NULL);
+  itoa(celciusToFahrenheit(temp), buffer, 10);
+  strcat(data, buffer);
+  strcat(data, '\0');
+  Serial.println(data);
+  // Send a message to manager_server
+  if (manager.sendtoWait((uint8_t *)data, sizeof(data), SERVER_ADDRESS))
+  {
+    // Now wait for a reply from the server
+    uint8_t len = sizeof(buf);
+    uint8_t from;
+    if (manager.recvfromAckTimeout(buf, &len, 2000, &from))
+    {
+      Serial.print("Recieved reply from node ");
+      Serial.print(from, DEC);
+      Serial.print(": \n");
+      Serial.println((char *)buf);
     }
-    
-		if (dsh_radio.ACKRequested()) {
-			dsh_radio.sendACK();
-			Serial.println("ACK sent");
-		}
-   
-	}
- 
-  switch(current_request) {
-    case NONE:
-      break;
-
-    case BAD_REQUEST:
-      dsh_radio.sendError("BAD REQUEST");
-      current_request = NONE;
-      break;
-    
-    case ALL:
-      dht11.read(DHT11_pin, &temp, &humidity, NULL);
-      Serial.println("Sending all sensor Data");
-
-      if (!dsh_radio.sendSensorReading("TEMPC", temp)) {
-        dsh_radio.sendError("TEMPC SEND");
-        Serial.println("Temp Transmission Failed");
-        current_request = NONE;
-        break;
-      }
-
-      if (!dsh_radio.sendSensorReading("HUM", humidity)) {
-        dsh_radio.sendError("HUM SEND");
-        Serial.println("Hum Transmission Failed");
-        current_request = NONE;
-        break;
-      }
-
-      if (!dsh_radio.sendSensorReading("RSSIDAT", dsh_radio.readRSSI())) {
-        dsh_radio.sendError("RSSI SEND");
-        Serial.println("RSSI Transmission Failed");
-        current_request = NONE;
-        break;
-      }
-      
-      dsh_radio.sendEnd();
-      current_request = NONE;
-      break;
-       
-    case TEMPC:
-      dht11.read(DHT11_pin, &temp, &humidity, NULL);
-      if (!dsh_radio.sendSensorReading("TEMPC", temp))
-        Serial.println("Temp Transmission Failed");
-      dsh_radio.sendEnd();
-      current_request = NONE;
-      break;
-      
-    case HUM:
-      dht11.read(DHT11_pin, &temp, &humidity, NULL);
-      if (!dsh_radio.sendSensorReading("HUM", humidity))
-        Serial.println("Hum Transmission Failed");
-      dsh_radio.sendEnd();
-      current_request = NONE;
-      break;
-    case RSSIDAT:
-      if (!dsh_radio.sendSensorReading("RSSI", dsh_radio.readRSSI()))
-        Serial.println("RSSI Transmission Failed");
-      dsh_radio.sendEnd();
-      current_request = NONE;
-      break;
-    
-    default:
-      current_request = NONE;
+    else
+    {
+      Serial.println("No reply, is gateway running?\n");
+    }
   }
+  else
+    Serial.println("Sending failed.\n");
+  // Sends data every ten seconds
+  delay(10000);
+}
+
+/**************************************************************
+* Function: celciusToFahrenheit
+* ------------------------------------------------------------ 
+* summary: Converts a given temperature in Celcius to its Fahrenheit 
+* parameters: int8_t Temperature in Celcius
+* return: int8_t Temperature in Fahrenheit
+**************************************************************/
+int8_t celciusToFahrenheit(int8_t c)
+{
+  return (c * 9.0) / 5.0 + 32;
+}
+
+/**************************************************************
+* Function: printTempF
+* ------------------------------------------------------------ 
+* summary: Prints the temperature from the MCP9808 sensor to serial
+* parameters: void
+* return: void
+**************************************************************/
+void printTempF()
+{
+  Serial.print("Temp: ");
+  dht11.read(DHT11_pin, &temp, &humidity, NULL)
+  Serial.print(celciusToFahrenheit(temp));
+  Serial.print("*F\n");
 }
