@@ -18,14 +18,12 @@ RH_RF69 driver;
 // Class to manage message delivery and receipt, using the driver declared above
 RHReliableDatagram manager(driver, CLIENT_ADDRESS);
 
-// Create the MCP9808 temperature sensor object ----------------------
-//Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
-
 //Create DHT11 dht11 object
+SimpleDHT11 dht11;
+
 const uint8_t DHT11_pin = 4;
 byte temp = -1;
 byte humidity = -1;
-SimpleDHT11 dht11;
 
 // Function prototypes
 int8_t celciusToFahrenheit(int8_t c);
