@@ -9,11 +9,23 @@
 #include "Adafruit_MCP9808.h"
 #include <RHReliableDatagram.h>
 
+#if defined(__AVR_ATmega32U4__) // Feather 32u4 w/Radio
+#define RFM69_CS 8
+#define RFM69_INT 7
+#define RFM69_RST 4
+#define LED 13
+#define radio() driver(RFM69_CS, RFM69_INT)
+#else
+#define RFM69_RST 0
+#define LED 13
+#define radio() driver
+#endif
+
 #define CLIENT_ADDRESS 9
 #define SERVER_ADDRESS 0
 
-// Singleton instance of the radio driver
-RH_RF69 driver;
+// Singleton instance of the radio driver. Managed by preprocessor directives
+RH_RF69 radio();
 
 // Class to manage message delivery and receipt, using the driver declared above
 RHReliableDatagram manager(driver, CLIENT_ADDRESS);
@@ -24,6 +36,8 @@ Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 // Function prototypes
 int8_t celciusToFahrenheit(int8_t c);
 void printTempF();
+void blink(byte PIN, byte DELAY_MS, byte loops);
+
 /**************************************************************
 * Function: setup
 * ------------------------------------------------------------ 
@@ -33,7 +47,12 @@ void printTempF();
 **************************************************************/
 void setup()
 {
+
   Serial.begin(9600);
+
+  pinMode(LED, OUTPUT);
+  pinMode(RFM69_RST, OUTPUT);
+  digitalWrite(RFM69_RST, LOW);
 
   if (!manager.init())
     Serial.println("init failed");
@@ -45,8 +64,6 @@ void setup()
   if (!tempsensor.begin())
     Serial.println("Couldn't find MCP9808!");
 
-  // If you are using a high power RF69 eg RFM69HW, you *must* set a Tx power with the
-  // ishighpowermodule flag set like this:
   driver.setTxPower(14, true);
 
   // The encryption key has to be the same as the one in the server
@@ -90,6 +107,7 @@ void loop()
       Serial.print(from, DEC);
       Serial.print(": \n");
       Serial.println((char *)buf);
+      blink(LED, 40, 3);
     }
     else
     {
@@ -126,4 +144,25 @@ void printTempF()
   Serial.print("Temp: ");
   Serial.print(celciusToFahrenheit(tempsensor.readTempC()));
   Serial.print("*F\n");
+}
+
+/**************************************************************
+* Function: blink
+* ------------------------------------------------------------ 
+* summary: Function fr configuring LED blinking
+* parameters: 
+*     byte PIN: The pin for the LED
+*     byte DELAY_MS: Delay between LED blinks
+*     byte loops: Number of led blinks
+* return: void
+**************************************************************/
+void blink(byte PIN, byte DELAY_MS, byte loops)
+{
+  for (byte i = 0; i < loops; i++)
+  {
+    digitalWrite(PIN, HIGH);
+    delay(DELAY_MS);
+    digitalWrite(PIN, LOW);
+    delay(DELAY_MS);
+  }
 }

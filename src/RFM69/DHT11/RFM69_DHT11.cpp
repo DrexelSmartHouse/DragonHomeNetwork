@@ -5,15 +5,26 @@
 **************************************************************/
 #include <SPI.h>
 #include <RH_RF69.h>
-#include <Wire.h>
 #include <SimpleDHT.h>
 #include <RHReliableDatagram.h>
+
+#if defined(__AVR_ATmega32U4__) // Feather 32u4 w/Radio
+#define RFM69_CS 8
+#define RFM69_INT 7
+#define RFM69_RST 4
+#define LED 13
+#define radio() driver(RFM69_CS, RFM69_INT)
+#else
+#define RFM69_RST 0
+#define LED 13
+#define radio() driver
+#endif
 
 #define CLIENT_ADDRESS 3
 #define SERVER_ADDRESS 0
 
 // Singleton instance of the radio driver
-RH_RF69 driver;
+RH_RF69 radio();
 
 // Class to manage message delivery and receipt, using the driver declared above
 RHReliableDatagram manager(driver, CLIENT_ADDRESS);

@@ -9,26 +9,28 @@
 #include <RH_RF69.h>
 #include <SPI.h>
 
+#if defined(__AVR_ATmega32U4__) // Feather 32u4 w/Radio
+#define RFM69_CS 8
+#define RFM69_INT 7
+#define RFM69_RST 4
+#define LED 13
+#define radio() driver(RFM69_CS, RFM69_INT)
+#else
+#define RFM69_RST 0
+#define LED 13
+#define radio() driver
+#endif
+
 #define SERVER_ADDRESS 0
 
-// Singleton instance of the radio driver
-RH_RF69 driver;
+// Singleton instance of the radio driver. Managed by preprocessor directives
+RH_RF69 radio();
 // Class to manage message delivery and receipt, using the driver declared above
 RHReliableDatagram manager(driver, SERVER_ADDRESS);
-
-const unsigned long time_out_ms = 1000;
-unsigned long start_time = 0;
-
-volatile bool receiving = false;
-volatile bool sweep_mode = false;
-
-uint8_t current_node_id = 1;
 
 // function prototypes
 void publishSensorReading();
 void publishLogMsg(String msg);
-void restartTimer();
-bool timeOut();
 
 /**************************************************************
  * Function: setup
@@ -48,6 +50,7 @@ void setup()
 
   if (!driver.setFrequency(915.0))
     Serial.println("setFrequency failed");
+
   driver.setTxPower(14, true);
 
   // The encryption key has to be the same as the one in the client
@@ -55,8 +58,8 @@ void setup()
                    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
   driver.setEncryptionKey(key);
 }
-uint8_t data[] = "And hello back to you";
-// Dont put this on the stack:
+
+uint8_t data[] = "Acknowledged";
 uint8_t buf[RH_RF69_MAX_MESSAGE_LEN];
 uint8_t dataRec[sizeof(buf)];
 char *vals;
@@ -115,81 +118,4 @@ void publishLogMsg(String msg)
   Serial.print(F("/log:"));
   Serial.print(msg);
   Serial.print('\n');
-}
-
-/**************************************************************
- * Function: restartTimer
- * ------------------------------------------------------------ 
- * summary: resets start_time 
- * parameters: void
- * return: void
- **************************************************************/
-void restartTimer()
-{
-  start_time = millis();
-}
-
-/**************************************************************
- * Function: timeOut
- * ------------------------------------------------------------ 
- * summary: returns boolean if a send times out
- * parameters: void
- * return: bool 
- **************************************************************/
-bool timeOut()
-{
-  return (millis() - start_time >= time_out_ms);
-}
-
-/**************************************************************
- * Function: incrementCurrNodeID
- * ------------------------------------------------------------ 
- * summary: returns boolean if next available node id is on 
- * available_nodes list
- * parameters: void
- * return: bool
- **************************************************************/
-bool incrementCurrNodeID()
-{
-}
-
-/**************************************************************
- * Function: requestAllFromNextNode
- * ------------------------------------------------------------ 
- * summary: finds the next node and requests data from it
- * if the next node_id isn't on the available_nodes list then 
- * it returns false
- * parameters: void
- * return: bool
- **************************************************************/
-bool requestAllFromNextNode()
-{
-  // TODO: Make this again?
-  // Probably not, since we will be using a new system not based on requests
-}
-
-/**************************************************************
- * Function: startNetworkSweep
- * ------------------------------------------------------------ 
- * summary: initializes a network sweep and calls 
- * requestAllFromNextNode, returns error message if node is busy
- * parameters: void
- * return: void
- **************************************************************/
-void Sweep()
-{
-  // TODO: Make this again?
-}
-
-/**************************************************************
- * Function: networkScan
- * ------------------------------------------------------------ 
- * summary: pings all nodes on the network and records which 
- * nodes are live
- * parameters: void
- * return: bool 
- **************************************************************/
-void Scan()
-{
-  // TODO: Make this again?
 }
