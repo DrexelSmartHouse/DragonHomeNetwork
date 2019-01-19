@@ -7,7 +7,8 @@ This is a python script that handles communication between a gateway and mqtt.
 import paho.mqtt.client as mqtt
 import serial
 import io
-import signal, sys
+import signal
+import sys
 
 from config_file import get_conf
 
@@ -16,20 +17,25 @@ conf_file_path = 'serial-to-mqtt.conf'
 
 # callback functions
 
+
 def on_connect(client, userdata, flags, rc):
     print('connected with result: ' + str(rc))
 
     # resubscribe whenever connecting or reconnecting
-    client.subscribe("RFM69/" + str(userdata['network id']) + "/requests")
+    client.subscribe("DHN/" + str(userdata['network id']) + "/requests")
+
 
 def on_message(client, userdata, msg):
     print(msg.topic + " " + str(msg.payload))
     userdata['serial'].write(msg.payload + str.encode('\n'))
 
 # signal handler for ctrl-c
+
+
 def signal_handler(signal, frame):
     print("Ending Program.....")
     sys.exit(0)
+
 
 def main():
 
@@ -37,20 +43,16 @@ def main():
     signal.signal(signal.SIGINT, signal_handler)
 
     # get consts from the config file
-    try:
-        conf_file = open(conf_file_path, 'r')
+    with open(conf_file_path, 'r') as conf_file:
         config = get_conf(conf_file)
         conf_file.close()
-    except:
-        print('Bad config file, ending')
-        sys.exit(0)
 
-    ## Serial Comms Setup
+    # Serial Comms Setup
 
     # setup the serial port based on the config file
     gateway_ser = serial.Serial()
     gateway_ser.baudrate = config['baudrate']
-    gateway_ser.timeout = None # set blocking
+    gateway_ser.timeout = None  # set blocking
 
     # check to see if the user inputed a serial port
     if len(sys.argv) == 2:
@@ -65,18 +67,17 @@ def main():
         print('could not find serial port: ' + gateway_ser.port)
         sys.exit(1)
 
-    ## MQTT Setup
+    # MQTT Setup
     server_ip = config['server ip']
     server_port = config['server port']
     client_id = config['client id']
-    keep_alive = config['keep alive'] # max number of seconds without sending a message to the broker
 
     client = mqtt.Client(client_id)
 
     # set the user data to the open and working serial port
     userdata = dict()
     userdata['serial'] = gateway_ser
-    userdata['network id'] = 0 # TODO get from the gateway
+    userdata['network id'] = 0  # TODO get from the gateway
     client.user_data_set(userdata)
 
     # set the callback functions
@@ -84,7 +85,7 @@ def main():
     client.on_message = on_message
 
     # start the connection
-    client.connect(server_ip, server_port, keep_alive)
+    client.connect(server_ip, server_port)
 
     # start the thread for processing incoming data
     client.loop_start()
@@ -92,7 +93,7 @@ def main():
     # TODO get the network ID from the gateway
     network_id = 0
 
-    pub_topic_prefix = "RFM69/" + str(network_id)
+    pub_topic_prefix = "DHN/" + str(network_id)
     # main loop
     while True:
 
@@ -109,6 +110,7 @@ def main():
 
     # stop the thread
     client.loop_stop()
+
 
 if __name__ == '__main__':
     main()
