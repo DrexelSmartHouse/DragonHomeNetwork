@@ -1,10 +1,7 @@
-// Feather9x_TX
-// -*- mode: C++ -*-
-
 #include <SPI.h>
 #include <RH_RF95.h>
 
-//for feather32u4
+//Feather32u4
 #define RFM95_CS 8
 #define RFM95_RST 4
 #define RFM95_INT 7
