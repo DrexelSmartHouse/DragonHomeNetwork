@@ -22,7 +22,7 @@ def on_connect(client, userdata, flags, rc):
     print('connected with result: ' + str(rc))
 
     # resubscribe whenever connecting or reconnecting
-    client.subscribe("DHN/" + str(userdata['network id']) + "/requests")
+    client.subscribe("DHN/" + str(userdata['network id']) + "/#")
 
 
 def on_message(client, userdata, msg):
