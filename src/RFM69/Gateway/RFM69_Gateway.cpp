@@ -80,13 +80,12 @@ void loop()
     // Wait for a message addressed to us from the client
     uint8_t len = sizeof(buf);
     uint8_t from;
-    Serial.println(driver.rssiRead());
     if (manager.recvfromAck(buf, &len, &from))
     {
       vals = strtok((char *)buf, ",:");
       while (vals != NULL)
       {
-        Serial.print("RFM69/");
+        Serial.print("DHN/");
         Serial.print(SERVER_ADDRESS, DEC);
         Serial.print('/');
         Serial.print(from, DEC);
@@ -95,7 +94,6 @@ void loop()
         Serial.print('/');
         vals = strtok(NULL, ",:");
         Serial.print(vals);
-        Serial.print('/');
         vals = strtok(NULL, ",:");
         Serial.print('\n');
       }

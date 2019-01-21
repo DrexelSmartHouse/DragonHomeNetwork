@@ -20,7 +20,7 @@
 #define radio() driver
 #endif
 
-#define CLIENT_ADDRESS 3
+#define CLIENT_ADDRESS 12
 #define SERVER_ADDRESS 0
 
 // Singleton instance of the radio driver
