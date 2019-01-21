@@ -3,3 +3,4 @@
 .vscode/
 /lib/
 workspace.code-workspace
+/DataCollectionAndAnalysis/__pycache__/

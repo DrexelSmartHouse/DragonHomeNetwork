@@ -26,7 +26,6 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(msg.topic + " " + str(msg.payload))
     userdata['serial'].write(msg.payload + str.encode('\n'))
 
 # signal handler for ctrl-c
@@ -101,12 +100,12 @@ def main():
         message = gateway_ser.readline()
         message = message.decode()
 
-        # clean up the message and split it up
+        # clean up the message
         message = message.strip()
-        message = message.split(':')
-        topic = message.pop(0)
-
-        client.publish(pub_topic_prefix + topic, ':'.join(message), 1)
+        message = message.split('/')
+        payload = message.pop()
+        
+        client.publish('/'.join(message), payload, 1)
 
     # stop the thread
     client.loop_stop()
