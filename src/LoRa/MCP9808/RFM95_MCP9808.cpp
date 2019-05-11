@@ -39,6 +39,12 @@ void setup()
     pinMode(RFM95_RST, OUTPUT);
     digitalWrite(RFM95_RST, LOW);
 
+    // manual reset
+    digitalWrite(RFM95_RST, LOW);
+    delay(10);
+    digitalWrite(RFM95_RST, HIGH);
+    delay(10);
+
     if (!manager.init())
         Serial.println("init failed");
     // Defaults after init are 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on

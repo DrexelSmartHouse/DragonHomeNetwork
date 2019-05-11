@@ -25,6 +25,16 @@ void setup()
 {
     Serial.begin(9600);
 
+    pinMode(LED, OUTPUT);
+    pinMode(RFM95_RST, OUTPUT);
+    digitalWrite(RFM95_RST, HIGH);
+
+    // manual reset
+    digitalWrite(RFM95_RST, LOW);
+    delay(10);
+    digitalWrite(RFM95_RST, HIGH);
+    delay(10);
+
     if (!manager.init())
         Serial.println("init failed");
     // Defaults after init are 434.0MHz, 13dBm, Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on
@@ -66,12 +76,7 @@ void loop()
             }
             // Send a reply back to the originator client
             if (!manager.sendtoWait(data, sizeof(data), from))
-                Serial.print("DHN/");
-                Serial.print(SERVER_ADDRESS, DEC);
-                Serial.print('/');
-                Serial.print(from, DEC);
-                Serial.print('/');
-                Serial.print('acknowledgementfailed');
+                Serial.println("Ack failed");
         }
     }
 }
@@ -85,7 +90,7 @@ void loop()
  **************************************************************/
 void publishLogMsg(String msg)
 {
-  Serial.print(F("/log:"));
-  Serial.print(msg);
-  Serial.print('\n');
+    Serial.print(F("/log:"));
+    Serial.print(msg);
+    Serial.print('\n');
 }

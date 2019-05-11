@@ -99,7 +99,7 @@ void loop()
       }
       // Send a reply back to the originator client
       if (!manager.sendtoWait(data, sizeof(data), from))
-        Serial.println("sendtoWait failed");
+        Serial.println("Ack failed");
     }
   }
 }
