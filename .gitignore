@@ -1,5 +1,4 @@
-.pioenvs
-.piolibdeps
+.pio
 .vscode/
 /lib/
 workspace.code-workspace
