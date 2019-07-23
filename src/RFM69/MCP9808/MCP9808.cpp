@@ -1,9 +1,9 @@
 #include <Wire.h>
 #include "Adafruit_MCP9808.h"
-#include "../RFM95.h"
+#include "../RFM69.h"
 
 // Singleton instance of the radio driver
-RFM95 radio;
+RFM69 radio;
 
 // Create the MCP9808 temperature sensor object
 Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
