@@ -17,8 +17,8 @@ def get_conf(conf_file):
         # build the dictionary from the ':' seperated pairs 
         if ':' in line:
             line = line.split(':')
-            key = line[0].strip().lower()
-            value = line[1].strip().lower()
+            key = line[0].strip()
+            value = line[1].strip()
             
             # convert to int if possible
             try:

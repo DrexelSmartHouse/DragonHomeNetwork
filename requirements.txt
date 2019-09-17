@@ -1,0 +1,8 @@
+# MQTT
+paho-mqtt==1.4.0 
+
+#Serial
+pyserial==3.4 
+
+#Database
+influxdb==5.2.1 
