@@ -1,0 +1,6 @@
+.pio
+.vscode/
+/lib/
+workspace.code-workspace
+/DataCollectionAndAnalysis/__pycache__/
+*.code-workspace
