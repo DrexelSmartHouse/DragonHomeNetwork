@@ -24,8 +24,6 @@ from config_file import get_conf
 conf_file_path = 'serial-to-mqtt.conf'
 
 # callback functions
-
-
 def on_connect(client, userdata, flags, rc):
     print('connected with result: ' + str(rc))
 

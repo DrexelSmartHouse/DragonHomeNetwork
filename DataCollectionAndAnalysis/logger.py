@@ -5,7 +5,6 @@ This is a simple mqtt logging client
 """
 
 import paho.mqtt.client as mqtt
-import context
 import logging
 import signal
 import sys
@@ -22,7 +21,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 def signal_handler(signal, frame):
-    print("Ending Program.....")
+    print("\nEnding Program.....")
     sys.exit(0)
 
 
