@@ -10,8 +10,8 @@
 #define radio() rf95(RFM95_CS, RFM95_INT)
 
 #define RF95_FREQ 915.0
-#define CLIENT_ADDRESS 1
-#define SERVER_ADDRESS 0
+#define CLIENT_ADDRESS 1 //TODO: Update the address so it comes from platformio.ini 
+#define SERVER_ADDRESS 1
 
 class RFM95 : private RH_RF95
 {

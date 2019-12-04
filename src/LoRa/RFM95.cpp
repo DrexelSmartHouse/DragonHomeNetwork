@@ -46,8 +46,10 @@ void RFM95::waitForMessage()
         if (manager.recvfromAck(buf, &len, &from))
         {
             vals = strtok((char *)buf, ",:");
+            char temp[10];
+            itoa(rf95.lastRssi(),temp,10);
             // For every sensor type sent.
-            while (vals != NULL)
+            while (vals != NULL && vals != temp)
             {
                 Serial.print("DHN/");
                 Serial.print(SERVER_ADDRESS, DEC);
@@ -62,14 +64,14 @@ void RFM95::waitForMessage()
                 Serial.print('\n');
             }
 
-            Serial.print("DHN/");
-            Serial.print(SERVER_ADDRESS, DEC);
-            Serial.print('/');
-            Serial.print(from, DEC);
-            Serial.print('/');
-            Serial.print("RSSI/");
-            Serial.print(rf95.lastRssi(), DEC);
-            Serial.print('\n');
+            // Serial.print("DHN/");
+            // Serial.print(SERVER_ADDRESS, DEC);
+            // Serial.print('/');
+            // Serial.print(from, DEC);
+            // Serial.print('/');
+            // Serial.print("RSSI/");
+            // Serial.print(rf95.lastRssi(), DEC);
+            // Serial.print('\n');
             // Send a reply back to the originator client
             if (!manager.sendtoWait(data, sizeof(data), from))
                 Serial.println("Ack failed");

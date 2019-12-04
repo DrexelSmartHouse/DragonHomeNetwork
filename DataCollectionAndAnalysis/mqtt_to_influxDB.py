@@ -15,6 +15,8 @@ import io
 import signal
 import sys
 import time
+from datetime import datetime
+import json
 
 from influxdb import InfluxDBClient
 
@@ -34,25 +36,32 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(msg.topic + " " + str(msg.payload))
+    now = datetime. now()
+    current_time = now. strftime("%D %H:%M:%S")
+    print(current_time + " " + msg.topic + " " + str(msg.payload))
     spTopic = msg.topic.split("/")
+
+    # print(current_time)
     msg_json = [
         {
             "measurement": "Grafana",
             "tags": {
-                "NodeID": spTopic[3],
-                "SensorType": spTopic[4]
+                "NodeID": spTopic[2],
+                "SensorType": spTopic[3],
+                "Time": current_time
             },
             "fields": {
-                "NetworkID": spTopic[2],
+                "NetworkID": spTopic[1],
                 "SensorValue": float(msg.payload)
             }
         }
     ]
-    userdata['influx client'].write_points(msg_json)
+    # with open('data.txt', 'a') as outfile:
+    #     json.dump(msg_json, outfile)
+        
+    print(userdata['influx client'].write_points(msg_json))
+
 # signal handler for ctrl-c
-
-
 def signal_handler(signal, frame):
     print("Ending Program.....")
     sys.exit(0)
@@ -67,6 +76,24 @@ def main():
     with open(conf_file_path, 'r') as conf_file:
         config = get_conf(conf_file)
         conf_file.close()
+    
+    # setup the serial port based on the config file
+    gateway_ser = serial.Serial()
+    gateway_ser.baudrate = config['baudrate']
+    gateway_ser.timeout = None  # set blocking
+
+    # check to see if the user inputed a serial port
+    if len(sys.argv) == 2:
+        gateway_ser.port = sys.argv[1]
+    else:
+        gateway_ser.port = config['serial port']
+
+    # attempt to open the serial port
+    try:
+        gateway_ser.open()
+    except serial.SerialException:
+        print('could not find serial port: ' + gateway_ser.port)
+        sys.exit(1)
 
     # MQTT Setup
     server_ip = config['server ip']
@@ -82,7 +109,8 @@ def main():
 
     client = mqtt.Client(client_id)
     clientdb = InfluxDBClient(hostDB, portDB, userDB, pwDB, dbName)
-
+    clientdb.create_database(dbName)
+    clientdb.create_retention_policy('great_policy', '1d',1,default=True)
     # set the user data to the open and working serial port
     userdata = dict()
     userdata['network id'] = 0  # TODO get from the gateway
@@ -98,7 +126,35 @@ def main():
 
     # start the thread for processing incoming data
     client.loop_start()
+    
+    # TODO get the network ID from the gateway
+    network_id = 0
 
+    pub_topic_prefix = "DHN/" + str(network_id)
+    # main loop
+    while True:
+
+        # block waiting for a message from the gateway
+        topic = gateway_ser.readline()
+        topic = topic.decode()
+
+        # clean up the message
+        # print(message)
+        topic = topic.strip()
+        topic = topic.split('/')
+
+ 
+        payload = topic.pop() 
+        # payload = message.pop() + ": " + payload
+        # print(payload)
+        try:
+            client.publish('/'.join(topic), payload,1)
+        except:
+            print(topic)
+            print(payload)
+
+    # stop the thread
+    client.loop_stop()
 
 if __name__ == '__main__':
     main()
