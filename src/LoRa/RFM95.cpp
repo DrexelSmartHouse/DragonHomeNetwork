@@ -49,21 +49,20 @@ void RFM95::waitForMessage()
             char temp[10];
             itoa(rf95.lastRssi(),temp,10);
             // For every sensor type sent.
+            Serial.print("DHN/");
+            Serial.print(SERVER_ADDRESS, DEC);
+            Serial.print('/');
+            Serial.print(from, DEC);
             while (vals != NULL && vals != temp)
             {
-                Serial.print("DHN/");
-                Serial.print(SERVER_ADDRESS, DEC);
-                Serial.print('/');
-                Serial.print(from, DEC);
                 Serial.print('/');
                 Serial.print(vals);
                 Serial.print('/');
                 vals = strtok(NULL, ",:");
                 Serial.print(vals);
-                vals = strtok(NULL, ",:");
-                Serial.print('\n');
+                vals = strtok(NULL, ",:");      
             }
-
+            Serial.print('\n');
             // Serial.print("DHN/");
             // Serial.print(SERVER_ADDRESS, DEC);
             // Serial.print('/');
