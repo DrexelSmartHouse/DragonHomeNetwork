@@ -1,140 +1,17 @@
-DataPoint 1 SensorID 0 Lux 68
-DataPoint 1 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 2 SensorID 0 Lux 76
-DataPoint 2 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 3 SensorID 0 Lux 76
-DataPoint 3 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 4 SensorID 0 Lux 71
-DataPoint 4 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 5 SensorID 0 Lux 72
-DataPoint 5 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 6 SensorID 0 Lux 72
-DataPoint 6 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 7 SensorID 0 Lux 71
-DataPoint 7 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 8 SensorID 0 Lux 71
-DataPoint 8 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 9 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 9 SensorID 0 Lux 73
-DataPoint 10 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 10 SensorID 0 Lux 76
-DataPoint 11 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 11 SensorID 0 Lux 76
-DataPoint 12 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 12 SensorID 0 Lux 77
-DataPoint 13 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 14 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 14 SensorID 0 Lux 77
-DataPoint 15 SensorID 1 TEMPF 82 HUMID%RH 39
-DataPoint 15 SensorID 0 Lux 75
-DataPoint 16 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 16 SensorID 0 Lux 75
-DataPoint 17 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 17 SensorID 0 Lux 76
-DataPoint 18 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 18 SensorID 0 Lux 76
-DataPoint 19 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 19 SensorID 0 Lux 76
-DataPoint 20 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 20 SensorID 0 Lux 76
-DataPoint 21 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 21 SensorID 0 Lux 76
-DataPoint 22 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 22 SensorID 0 Lux 76
-DataPoint 23 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 23 SensorID 0 Lux 76
-DataPoint 24 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 24 SensorID 0 Lux 76
-DataPoint 25 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 25 SensorID 0 Lux 76
-DataPoint 26 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 26 SensorID 0 Lux 76
-DataPoint 27 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 27 SensorID 0 Lux 75
-DataPoint 28 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 28 SensorID 0 Lux 74
-DataPoint 29 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 29 SensorID 0 Lux 75
-DataPoint 30 SensorID 1 TEMPF 80 HUMID%RH 39
-DataPoint 30 SensorID 0 Lux 75
-DataPoint 31 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 31 SensorID 0 Lux 75
-DataPoint 32 SensorID 0 Lux 75
-DataPoint 32 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 33 SensorID 0 Lux 75
-DataPoint 33 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 34 SensorID 0 Lux 75
-DataPoint 34 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 35 SensorID 0 Lux 75
-DataPoint 35 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 36 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 37 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 37 SensorID 0 Lux 75
-DataPoint 38 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 38 SensorID 0 Lux 75
-DataPoint 39 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 39 SensorID 0 Lux 75
-DataPoint 40 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 40 SensorID 0 Lux 75
-DataPoint 41 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 41 SensorID 0 Lux 71
-DataPoint 42 SensorID 1 TEMPF 80 HUMID%RH 40
-DataPoint 42 SensorID 0 Lux 75
-DataPoint 1 SensorID 1 TEMPF 82 HUMID%RH 42
-DataPoint 2 SensorID 1 TEMPF 84 HUMID%RH 42
-DataPoint 3 SensorID 1 TEMPF 84 HUMID%RH 42
-DataPoint 4 SensorID 1 TEMPF 84 HUMID%RH 41
-DataPoint 5 SensorID 1 TEMPF 84 HUMID%RH 41
-DataPoint 6 SensorID 1 TEMPF 84 HUMID%RH 41
-DataPoint 7 SensorID 1 TEMPF 84 HUMID%RH 41
-DataPoint 8 SensorID 1 TEMPF 84 HUMID%RH 41
-DataPoint 9 SensorID 1 TEMPF 84 HUMID%RH 41
-DataPoint 10 SensorID 1 TEMPF 84 HUMID%RH 40
-DataPoint 11 SensorID 1 TEMPF 84 HUMID%RH 40
-DataPoint 12 SensorID 1 TEMPF 84 HUMID%RH 40
-DataPoint 1 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 2 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 3 SensorID 1 TEMPF 82 HUMID%RH 41
-DataPoint 1 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 2 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 3 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 4 SensorID 1 TEMPF 82 HUMID%RH 41
-DataPoint 1 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 2 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 1 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 2 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 3 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 4 SensorID 1 TEMPF 82 HUMID%RH 40
-DataPoint 1 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 2 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 1 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 2 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 3 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 4 SensorID 1 TEMPF 84 HUMID%RH 37
-DataPoint 5 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 6 SensorID 1 TEMPF 84 HUMID%RH 39
-DataPoint 7 SensorID 1 TEMPF 84 HUMID%RH 39
-DataPoint 8 SensorID 1 TEMPF 84 HUMID%RH 39
-DataPoint 9 SensorID 1 TEMPF 84 HUMID%RH 39
-DataPoint 10 SensorID 1 TEMPF 84 HUMID%RH 39
-DataPoint 11 SensorID 1 TEMPF 84 HUMID%RH 39
-DataPoint 12 SensorID 1 TEMPF 84 HUMID%RH 39
-DataPoint 13 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 14 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 15 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 16 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 1 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 2 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 3 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 4 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 5 SensorID 1 TEMPF 84 HUMID%RH 38
-DataPoint 1 SensorID 1 TEMPF 86 HUMID%RH 35
-DataPoint 1 SensorID 1 TEMPF 86 HUMID%RH 36
-DataPoint 1 SensorID 1 TEMPF 84 HUMID%RH 34
-DataPoint 2 SensorID 1 TEMPF 84 HUMID%RH 34
-DataPoint 1 SensorID 1 TEMPF 84 HUMID%RH 34
-DataPoint 2 SensorID 1 TEMPF 84 HUMID%RH 34
-DataPoint 3 SensorID 1 TEMPF 84 HUMID%RH 34
-DataPoint 1 SensorID 1 TEMPF 84 HUMID%RH 34
-DataPoint 2 SensorID 1 TEMPF 86 HUMID%RH 34
-DataPoint 3 SensorID 1 TEMPF 84 HUMID%RH 34
+DataPoint 1 Time 07/13/20 16:16:50 Run 1 SensorID 1 TEMPF 82 HUMID%RH 54
+DataPoint 2 Time 07/13/20 16:16:55 Run 1 SensorID 1 TEMPF 82 HUMID%RH 54
+DataPoint 3 Time 07/13/20 16:17:01 Run 1 SensorID 1 TEMPF 82 HUMID%RH 54
+DataPoint 4 Time 07/13/20 16:17:06 Run 1 SensorID 1 TEMPF 82 HUMID%RH 54
+DataPoint 5 Time 07/13/20 16:17:12 Run 1 SensorID 1 TEMPF 82 HUMID%RH 54
+DataPoint 6 Time 07/13/20 16:17:18 Run 1 SensorID 1 TEMPF 82 HUMID%RH 54
+DataPoint 7 Time 07/13/20 16:17:23 Run 1 SensorID 1 TEMPF 82 HUMID%RH 54
+DataPoint 1 Time 07/13/20 16:17:59 Run 2 SensorID 1 TEMPF 84 HUMID%RH 54
+DataPoint 2 Time 07/13/20 16:18:05 Run 2 SensorID 1 TEMPF 84 HUMID%RH 54
+DataPoint 3 Time 07/13/20 16:18:10 Run 2 SensorID 1 TEMPF 84 HUMID%RH 54
+DataPoint 4 Time 07/13/20 16:18:16 Run 2 SensorID 1 TEMPF 84 HUMID%RH 54
+DataPoint 5 Time 07/13/20 16:18:21 Run 2 SensorID 1 TEMPF 84 HUMID%RH 54
+DataPoint 1 Time 07/13/20 16:18:39 Run 3 SensorID 1 TEMPF 84 HUMID%RH 53
+DataPoint 2 Time 07/13/20 16:18:44 Run 3 SensorID 1 TEMPF 84 HUMID%RH 53
+DataPoint 3 Time 07/13/20 16:18:50 Run 3 SensorID 1 TEMPF 84 HUMID%RH 53
+DataPoint 4 Time 07/13/20 16:18:55 Run 3 SensorID 1 TEMPF 84 HUMID%RH 53
+DataPoint 5 Time 07/13/20 16:19:01 Run 3 SensorID 1 TEMPF 84 HUMID%RH 53
