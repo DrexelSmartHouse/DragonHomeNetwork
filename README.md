@@ -54,7 +54,7 @@ todo include image.
 
 ### Software setup <a name="softwaresetup"></a>
 Visual Studio Code, for its built-in Git commands and easy installation of required extensions. PlatformIO IDE is installed as an extension in VSCode due to is optimization for embedded C/C++ development for the gateway and sensors:
-- [Visual Studion Code]("https://code.visualstudio.com/") should be downloaded and installed first.
+- [Visual Studion Code](https://code.visualstudio.com/) should be downloaded and installed first.
 - Then, [PlatformIO]("https://maker.pro/arduino/tutorial/how-to-use-platformio-in-visual-studio-code-to-program-arduino") will be installed insided VS Code as an extension.
 ### Network setup <a name="networksetup"></a>
 
