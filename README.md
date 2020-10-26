@@ -22,8 +22,9 @@ The purpose of this project is to create an inexpensive, robust, low-power IoT s
 ## Features <a name="features"></a>
 The completed network has the following features:
 - Modular addition and modification of sensors,
-- Low cost ($13.67 for the gateway node and $13.67 for each additional node on the network, with efficient cost scaling),
-- Power consumption: 102mA on standby, 205mA sending.
+- Low cost ($34.95for the gateway node and $94.95for each additional node on the network, with efficient cost scaling)
+https://www.adafruit.com/product/3078
+- Power consumption: ~40mA during active radio listening, ~120mA transmitting.
 - Packet transmission up to 200 meters.
 
 ## Quick start <a name="quickstart"></a>
