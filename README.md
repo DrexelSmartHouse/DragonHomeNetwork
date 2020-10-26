@@ -62,11 +62,11 @@ Below are the steps to initialize the server, gateway and one sensor node.
 
 1. **Gateway node setup**
 
-  Program Radio Gateway with `DragonHomeNetwork/src/LoRa/Gateway/Gateway.cpp`. This node receives Radio transmissions from every sensor node and forwards them to the mqtt server via USB.
+    Program Radio Gateway with `DragonHomeNetwork/src/LoRa/Gateway/Gateway.cpp`. This node receives Radio transmissions from every sensor node and forwards them to the mqtt server via USB.
 
-  In `DragonHomeNetwork/platformio.ini`, change to ```default_envs = F32u4_RFM95_Gateway`` in order to upload the Gateway script to the gateway node.
+    In `DragonHomeNetwork/platformio.ini`, change to ```default_envs = F32u4_RFM95_Gateway`` in order to upload the Gateway script to the gateway node.
 
-  Connect the Arduino node to your server.
+    Connect the Arduino node to your server.
 
 
 2. **Server setup.**
