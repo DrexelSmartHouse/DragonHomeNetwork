@@ -13,6 +13,7 @@ The purpose of this project is to create an inexpensive, robust, low-power IoT s
   - [Necessary hardware](#necessaryhardware)
   - [Necessary tools](#necessarytools)
   - [Hardware setup](#hardwaresetup)
+  - [Software setup](#softwaresetup)
   - [Network setup](#networksetup)
 - [Research Analysis](#ra)
   - [Cost Scaling](#cost)
@@ -28,7 +29,7 @@ https://www.adafruit.com/product/3078
 - Packet transmission up to 200 meters.
 
 ![Final Build of Sensors and Gateway](/images/sensors.png)
-Format: ![Alt Text](url)
+Format: ![Building Autonomy and Simulation Lab]("https://research.coe.drexel.edu/caee/basl/")
 
 ## Quick start <a name="quickstart"></a>
 ### Necessary hardware <a name="necessaryhardware"></a>
@@ -51,7 +52,10 @@ The following hardware is necessary to set up the network and connect one node:
 Follow the below schematic to set up your nodes:
 todo include image.
 
-
+### Software setup <a name="softwaresetup"></a>
+Visual Studio Code, for its built-in Git commands and easy installation of required extensions. PlatformIO IDE is installed as an extension in VSCode due to is optimization for embedded C/C++ development for the gateway and sensors:
+- [Visual Studion Code]("https://code.visualstudio.com/") should be downloaded and installed first.
+- Then, [PlatformIO]("https://maker.pro/arduino/tutorial/how-to-use-platformio-in-visual-studio-code-to-program-arduino") will be installed insided VS Code as an extension.
 ### Network setup <a name="networksetup"></a>
 
 Below are the steps to initialize the server, gateway and one sensor node.
