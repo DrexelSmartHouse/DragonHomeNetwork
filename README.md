@@ -1,4 +1,4 @@
-# Outdated as of 5/3/19. Will be updated in the near future.
+# Updated as of 10/26/20. Will be updated in the near future.
 
 # DragonHomeNetwork
 
@@ -26,6 +26,9 @@ The completed network has the following features:
 https://www.adafruit.com/product/3078
 - Power consumption: ~40mA during active radio listening, ~120mA transmitting.
 - Packet transmission up to 200 meters.
+
+![Final Build of Sensors and Gateway](/images/sensors.png)
+Format: ![Alt Text](url)
 
 ## Quick start <a name="quickstart"></a>
 ### Necessary hardware <a name="necessaryhardware"></a>
