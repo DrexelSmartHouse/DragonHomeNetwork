@@ -62,9 +62,11 @@ Below are the steps to initialize the server, gateway and one sensor node.
 
 1. **Gateway node setup**
 
-   Program Radio Gateway Arduino Uno with `DragonHomeNetwork/Arduino/rfm69-network/gateway_uart_mqtt`. This node receives Radio transmissions from every sensor node and forwards them to the mqtt server via USB.
+  Program Radio Gateway with `DragonHomeNetwork/src/LoRa/Gateway/Gateway.cpp`. This node receives Radio transmissions from every sensor node and forwards them to the mqtt server via USB.
 
-   Connect the Arduino node to your server.
+  In `DragonHomeNetwork/platformio.ini`, change to ```default_envs = F32u4_RFM95_Gateway`` in order to upload the Gateway script to the gateway node.
+
+  Connect the Arduino node to your server.
 
 
 2. **Server setup.**
@@ -75,7 +77,10 @@ Below are the steps to initialize the server, gateway and one sensor node.
     ```
     git clone https://github.com/DrexelSmartHouse/DragonHomeNetwork.git
     ```
-
+    Go to Professor James Lo branch:
+    ```
+    git checkout lo_lab
+    ```
     Install mosquitto and mosquitto-clients, then enable mosquitto daemon:
 
     ```
@@ -111,14 +116,13 @@ Below are the steps to initialize the server, gateway and one sensor node.
 
 3. **Sensor node setup**
 
-   Install simple dht library through the Arduino IDE.
+   With PlatformIO installed with VS code, MCP9808 library should be already installed.
 
-   In the DragonHomeNetwork/Arduino/rfm69-network/dht11_sensor_node script, change the node_id (line 13) to match the number you wish to give the end node on the network. This variable helps you to identify where data is coming from when there are multiple sensor nodes on the network.
+   In the `DragonHomeNetwork/src/LoRa/RFM95.cpp`, change the SERVER_ADDRESS (line 7) to match the number you wish to give the end node on the network. This variable helps you to identify where data is coming from when there are multiple sensor nodes on the network.
 
-   Upload this script to the sensor end node equipped with the DHT11 Temperature and Humidity sensor.
+   In `DragonHomeNetwork/platformio.ini`, change to ```default_envs = F32u4_RFM69_MCP9808``` in order to upload the `DragonHomeNetwork/src/LoRa/MCP9808/MCP9808.cpp` to the sensor end node equipped with the MCP9808 Temperature sensor.
 
    This node can be powered via USB or wall power. Once powered on, it will automatically send data to the server.
-
 
 ## Research Analysis <a name="ra"></a>
 ### Cost Scaling <a name="cost"></a>
