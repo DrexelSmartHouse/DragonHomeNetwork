@@ -29,7 +29,7 @@ https://www.adafruit.com/product/3078
 - Packet transmission up to 200 meters.
 
 ![Final Build of Sensors and Gateway](/images/sensors.png)
-Format: ![Building Autonomy and Simulation Lab]("https://research.coe.drexel.edu/caee/basl/")
+[Building Autonomy and Simulation Lab](https://research.coe.drexel.edu/caee/basl/)
 
 ## Quick start <a name="quickstart"></a>
 ### Necessary hardware <a name="necessaryhardware"></a>
