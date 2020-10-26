@@ -22,7 +22,7 @@ The purpose of this project is to create an inexpensive, robust, low-power IoT s
 ## Features <a name="features"></a>
 The completed network has the following features:
 - Modular addition and modification of sensors,
-- Low cost ($34.95for the gateway node and $94.95for each additional node on the network, with efficient cost scaling)
+- Low cost ($34.95for the gateway node and $34.95for each additional node on the network, with efficient cost scaling)
 https://www.adafruit.com/product/3078
 - Power consumption: ~40mA during active radio listening, ~120mA transmitting.
 - Packet transmission up to 200 meters.
@@ -30,13 +30,10 @@ https://www.adafruit.com/product/3078
 ## Quick start <a name="quickstart"></a>
 ### Necessary hardware <a name="necessaryhardware"></a>
 The following hardware is necessary to set up the network and connect one node:
-- (2) Arduino Uno
 - (2) Arduino Proto Shield with Mini Breadboard
-- (2) RFM69HCW Wireless Transceiver - 915MHz
-- (1) 10Kohm through-hole resistors
-- (1) DHT11 Temperature-Humidity sensor
+- (2) Adafruit Feather 32u4 RFM95 LoRa Radio - 915MHz
+- (1) MCP9808 High Accuracy I2C Temperature sensor
 - (1) 9V 1A Arduino power supplies
-- (2) voltage/logic converters
 - Solid core wires
 - Solder
 
@@ -122,14 +119,12 @@ The following table documents the cost of the core of the network - the Ethernet
 
 | Component                                                                   | Price   |
 |-----------------------------------------------------------------------------|---------|
-| [Arduino Uno]("https://www.aliexpress.com/item/Free-shipping-high-quality-UNO-R3-MEGA328P-CH340G-for-Arduino-Compatible-NO-USB-CABLE/32231525607.html?spm=2114.search0104.3.286.65936d00tZ2ORH&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711212_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711313_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=20dba46e-7254-40ef-8ecb-a8b02234de01-45&algo_pvid=20dba46e-7254-40ef-8ecb-a8b02234de01&transAbTest=ae803_5&priceBeautifyAB=0")                                     | $3.05  |
 |  [Proto Shield with Mini Breadboard]("https://www.aliexpress.com/item/Newbrand-Prototyping-Prototype-Shield-ProtoShield-Mini-Breadboard-for-Arduino-Free-Shipping/32279103685.html?spm=2114.search0104.3.112.2fb358f9cm0yb2&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711212_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5722413_5711312,searchweb201603_2,ppcSwitch_5&algo_expid=c98ab005-6807-4240-8d2e-648ed088282c-19&algo_pvid=c98ab005-6807-4240-8d2e-648ed088282c&transAbTest=ae803_5&priceBeautifyAB=0")              | $1.10   |
-| [RFM69HCW Wireless Transciever - 915MHz (4 pack)]("https://www.aliexpress.com/item/RFM69HCW-frequency-transceiver-module-433-868-915MHZ-can-be-selected/32723542589.html?spm=2114.search0104.3.1.aaa7698dOttIEv&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711211_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711311_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=62be832f-9626-4ba1-a45e-ef94174177e5-0&algo_pvid=62be832f-9626-4ba1-a45e-ef94174177e5&transAbTest=ae803_5&priceBeautifyAB=0") | $2.15  |
-| [10Kohm Resistor (100-pack)]("https://www.aliexpress.com/item/100pcs-RoHS-Lead-Free-Metal-Film-Resistor-1-6W-Watts-10K-ohm-10KR-1-Tolerance-Precision/1852552440.html?spm=2114.search0104.3.16.3af73fccKp6mC7&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711212_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711313_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=094f4518-adbe-4560-8d76-4bb5bbc8398d-2&algo_pvid=094f4518-adbe-4560-8d76-4bb5bbc8398d&transAbTest=ae803_5&priceBeautifyAB=0")                      | $0.69   |
+| [Feather 32u4 RFM95 - 915MHz (2 pack)]("https://www.adafruit.com/product/3078") | $69.90 |
+| [MCP9808 Temperature sensor]("https://www.adafruit.com/product/1782?gclid=Cj0KCQjw59n8BRD2ARIsAAmgPmKS2YybZiqMzAKGVtOok_7Qck5UNR63AhICCtJkE-IcmJ4vnps6N6IaAuyBEALw_wcB")                                     | $4.95  |
 | [9V 1A Arduino Power Supply]("https://www.aliexpress.com/item/US-Plug-9V-1A-Switching-Power-Supply-Converter-Adapter-Wall-Charger-4-0mmx1-7mm/32849270931.html?spm=2114.search0104.3.109.c56333bd76YIdY&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711213_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711313_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=22c8c7c1-85ab-437a-bb54-977e7bd0358f-16&algo_pvid=22c8c7c1-85ab-437a-bb54-977e7bd0358f&transAbTest=ae803_5&priceBeautifyAB=0")                      | $2.08   |
-| [Voltage/logic converter]("https://www.aliexpress.com/item/4-channel-IIC-I2C-Logic-Level-Converter-Bi-Directional-Module-5V-to-3-3V-For-Arduino/32310628741.html?spm=2114.search0104.3.44.2cbb4b4cdcwCWG&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711211_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_5722412_10620_5711311,searchweb201603_2,ppcSwitch_5&algo_expid=d1208a18-bef2-48d7-8cd7-04bda35e2558-6&algo_pvid=d1208a18-bef2-48d7-8cd7-04bda35e2558&transAbTest=ae803_5&priceBeautifyAB=0")                         | $0.28   |
 | [Solid core wire]("https://www.aliexpress.com/item/Tinned-copper-22AWG-2-pin-Red-Black-cable-PVC-insulated-wire-22-awg-wire-Electric-cable/32597557917.html?spm=2114.search0104.3.2.2f6215c6LjDKMM&ws_ab_test=searchweb0_0,searchweb201602_3_10152_10151_10065_10344_10068_10130_10324_10342_10547_10325_10343_10546_10340_10548_10341_10545_10084_10083_10618_10307_5711213_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5711313_5722413,searchweb201603_2,ppcSwitch_5&algo_expid=34901f3e-f79f-4489-9022-3fd66b59f083-0&algo_pvid=34901f3e-f79f-4489-9022-3fd66b59f083&transAbTest=ae803_5&priceBeautifyAB=0")                            | $0.48  |
-| Total (+ shipping)                                               | $13.67 |
+| Total (+ shipping)                                               | $78.51 |
 
 
 
@@ -137,10 +132,8 @@ The final table documents how cost scales as _n_ nodes are added to the network.
 
 | Nodes | Cost      |
 |-------|-----------|
-| 1     | $13.67    |
-| 10    | $106.28   |
-| 100   | $1210.18  |
-| 500   | $6893.38  |
+| 1     | $34.95    |
+| 10    | $349.5   |
 
 
 ## Releases <a name="releases"></a>
@@ -148,8 +141,10 @@ Not currently released.
 
 ## Contributors <a name="contributors"></a>
 The DragonHome Network team:
-
 - [Joshua Cohen](https://github.com/jcohen98)
 - [Reno Farnesi](https://github.com/nfarnesi4)
 - [Ryan Hassing](https://github.com/ryanhassing)
 - [Timothy Lechman](https://github.com/tlechman49)
+
+Building Autonomy and Simulation Lab - Sensor team:
+- [Long Trinh](https://github.com/trnhx001)
