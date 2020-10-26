@@ -1,10 +1,9 @@
 # Updated as of 10/26/20. Will be updated in the near future.
 
 # DragonHomeNetwork - Building Autonomy and Simulation Lab Branch
+Our wireless network is based on the Arduino platform and include many sensors and form factors. The original development is credited to Joshua Cohen’s team (including Reno Farnesi, Ryan Hassing and Timothy Lechman) and a previous Drexel Smart House research project: The Dragon Home Network.
 
-The exponential growth of wireless communications markets around the world has allowed users from all corners of the globe to share data almost instantaneously. However, managing the collection and transmission of data from multiple devices connected in small, confined networks presents major challenges. The futuristic ideal of having millions of interconnected "things" (inanimate objects, devices, communities, and environments) that have the ability to sense, communicate, network, and produce mass amounts of data that can be utilized in a novel way is known as the Internet of Things (IoT). Automation, environmental analysis, and health and safety awareness are large areas of study that can benefit from IoT networks, but issues with compatibility, versatility, and cost inhibit implementation of such networks.
-
-The purpose of this project is to create an inexpensive, robust, low-power IoT sensor network to serve as an easily implementable model for individuals, communities, and cities. Additionally, the network can serve as a tool within other areas of research for experimentation and QA analysis. The foundation of this system was successfully created using Arduino-based processing in tandem with packet radios that communicate over sub-GHz frequency bands. Ethernet data packet management was done using MQ Telemetry Transport (MQTT) and data visualization was performed with Grafana and MATLAB. This network also utilizes InfluxDB to store and manage data effectively.
+The project's final goal is to build a robust and low-power IoT sensor network to serve a indoor environmetal data collection system, which can integrated into an autonomous flying drone and on the ground rover. With the entire system in place, the full monitoring system can be used to investigate building-related problems and solutions in energy conservation, occupant cofort and health. The core of the system is based on network of microcontroller boards Feather 32u4 with built-in LoRa packet radio transceiver, which initiates communication over 915 MHz frequency bands. Ethernet data packet management was done using MQ Telemetry Transport (MQTT), and local data storage is implemented. This network also utilizes the same InfluxDB, which is Time Series Database to store and manage data effectively.
 
 
 ## Contents
@@ -23,7 +22,7 @@ The purpose of this project is to create an inexpensive, robust, low-power IoT s
 ## Features <a name="features"></a>
 The completed network has the following features:
 - Modular addition and modification of sensors,
-- Low cost ($34.95 for the gateway node and $34.95for each additional node on the network, with efficient cost scaling)
+- Low cost ($34.95 for the gateway node and $34.95 for each additional node on the network, with efficient cost scaling)
 https://www.adafruit.com/product/3078
 - Power consumption: ~40mA during active radio listening, ~120mA transmitting.
 - Packet transmission up to 200 meters.
@@ -64,7 +63,7 @@ Below are the steps to initialize the server, gateway and one sensor node.
 
     Program Radio Gateway with `DragonHomeNetwork/src/LoRa/Gateway/Gateway.cpp`. This node receives Radio transmissions from every sensor node and forwards them to the mqtt server via USB.
 
-    In `DragonHomeNetwork/platformio.ini`, change to ```default_envs = F32u4_RFM95_Gateway`` in order to upload the Gateway script to the gateway node.
+    In `DragonHomeNetwork/platformio.ini`, change to ```default_envs = F32u4_RFM95_Gateway``` in order to upload the Gateway script to the gateway node.
 
     Connect the Arduino node to your server.
 
