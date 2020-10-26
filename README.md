@@ -5,7 +5,8 @@ Our wireless network is based on the Arduino platform and include many sensors a
 
 The project's final goal is to build a robust and low-power IoT sensor network to serve a indoor environmetal data collection system, which can integrated into an autonomous flying drone and on the ground rover. With the entire system in place, the full monitoring system can be used to investigate building-related problems and solutions in energy conservation, occupant cofort and health. The core of the system is based on network of microcontroller boards Feather 32u4 with built-in LoRa packet radio transceiver, which initiates communication over 915 MHz frequency bands. Ethernet data packet management was done using MQ Telemetry Transport (MQTT), and local data storage is implemented. This network also utilizes the same InfluxDB, which is Time Series Database to store and manage data effectively.
 
-More information on our "Building Autonomy and Simulation Lab" can be found [here](https://research.coe.drexel.edu/caee/basl/)
+More information on our **"Building Autonomy and Simulation Lab"** can be found [here](https://research.coe.drexel.edu/caee/basl/)
+
 ![Our Works](/images/ourWorks.png)
 
 ## Contents
