@@ -16,18 +16,27 @@ from config_file import get_conf
 conf_file_path = 'serial-to-mqtt.conf'
 
 # callback functions
-
-
 def on_connect(client, userdata, flags, rc):
     print('connected with result: ' + str(rc))
-
-    # resubscribe whenever connecting or reconnecting
+    print(f"Suscribe to DHN/{str(userdata['network id'])}/#")
+    #subscribe whenever connecting or reconnecting 
     client.subscribe("DHN/" + str(userdata['network id']) + "/#")
 
 
 def on_message(client, userdata, msg):
-    userdata['serial'].write(msg.payload + str.encode('\n'))
+    spTopic = msg.topic.split("/")
+    
+    # topic that the web server subscribe 
+    topic = "DHN/OUT/" + '/'.join(spTopic[1:2])
+    
+    # Try to publish if not, print out the error
+    try:
+        client.publish(topic, msg.payload,1)
+    except:
+        print(topic)
+        print(msg.payload)
 
+    print(f"Sending from on message {topic}/{msg.payload}")
 # signal handler for ctrl-c
 
 
@@ -96,16 +105,23 @@ def main():
     # main loop
     while True:
 
-        # block waiting for a message from the gateway
-        message = gateway_ser.readline()
-        message = message.decode()
+        # block waiting for a message from the gateway in Serial    
+        topic = gateway_ser.readline()
+        topic = topic.decode()
 
         # clean up the message
-        message = message.strip()
-        message = message.split('/')
-        payload = message.pop()
+        topic = topic.strip()
+        topic= topic.split('/')
+
+        payload = '/'.join(topic[2:])
         
-        client.publish('/'.join(message), payload, 1)
+        print(f"Sending {'/'.join(topic[0:2])}/{payload}")
+        
+        try:
+            client.publish('/'.join(topic[0:2]), payload,1)
+        except:
+            print(topic)
+            print(payload)
 
     # stop the thread
     client.loop_stop()
